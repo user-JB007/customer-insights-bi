@@ -44,16 +44,32 @@ SaaS operators need a single customer view: who is growing, who is leaving, and 
 
 ```
 Raw CSV (customers, transactions, support)
+JSONPlaceholder API (users / posts / comments)  ──► engagement_events mart
         │
         ▼
  Curated marts  ←── sql/marts/*.sql (Snowflake)  +  Python parity builder
         │
         ├──► Churn model (Gradient Boosting) → artifacts/model/
-        └──► Power BI report screenshots → powerbi/screenshots/
-                 └── semantic model + DAX for Desktop / Fabric recreation
+        ├──► Power BI report screenshots → powerbi/screenshots/
+        └──► HTTP sinks: local FastAPI /ingest + JSONPlaceholder /posts
 ```
 
 See [docs/architecture.md](docs/architecture.md) and [docs/bi_tool_mapping.md](docs/bi_tool_mapping.md).
+
+### Sources
+
+| Source | Type | Notes |
+|--------|------|-------|
+| `data/raw/*.csv` | File | Default offline path (`--source file`) |
+| [JSONPlaceholder](https://jsonplaceholder.typicode.com/) | HTTP GET | Primary API source — `/users`, `/posts`, `/comments` as engagement inputs → `data/marts/engagement_events.csv`. Config: `config/pipeline.yaml` `api_source` / `API_SOURCE_BASE_URL` |
+
+### Sinks
+
+| Sink | Type | Notes |
+|------|------|-------|
+| Local landing API | HTTP POST | `src/sinks/http_sink_server.py` — `POST /ingest` → `data/landing/`; `SINK_API_URL` default `http://127.0.0.1:8089/ingest` |
+| [JSONPlaceholder](https://jsonplaceholder.typicode.com/posts) | HTTP POST | Alternate external sink (`EXTERNAL_SINK_URL`) |
+| File fallback | Local JSON | If local sink is down, KPI snapshot is written under `data/landing/` |
 
 ## Deliverables
 
@@ -78,6 +94,24 @@ pip install -r requirements.txt
 
 python run_pipeline.py
 ```
+
+API source + sink stages:
+
+```bash
+# Pull engagement events from JSONPlaceholder
+python -m src.integrations.api_source
+
+# Full run with API source and KPI sink
+python run_pipeline.py --source both --sink api
+
+# Local sink receiver
+uvicorn src.sinks.http_sink_server:app --host 127.0.0.1 --port 8089
+
+# Push KPI snapshot only
+python -m src.integrations.api_sink
+```
+
+Offline: use `--source file` (default) so existing raw CSV → marts continues when the network is unavailable. If a prior `engagement_events` mart exists, the API source reuses it on failure.
 
 Outputs:
 
@@ -116,8 +150,12 @@ customer-insights-bi/
 ├── powerbi/                  # 2 reports: screenshots, model, DAX, page briefs
 ├── reports/powerbi/screenshots/  # mirror of Power BI PNGs
 ├── sql/marts/                # Snowflake-flavored DDL + views
+├── config/pipeline.yaml      # API source/sink URLs
+├── .env.example
 └── src/
     ├── data/                 # generate + build marts
+    ├── integrations/         # JSONPlaceholder source + HTTP sink client
+    ├── sinks/http_sink_server.py
     ├── models/               # train churn classifier
     └── viz/                  # Power BI page generator
 ```

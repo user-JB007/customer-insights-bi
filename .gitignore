@@ -15,3 +15,8 @@ env/
 .pytest_cache/
 .mypy_cache/
 *.pkl.bak
+
+# API landing + sink receipts
+data/landing/
+data/sink_receipts/
+data/raw/api/

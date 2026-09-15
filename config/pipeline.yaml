@@ -1,0 +1,25 @@
+project:
+  name: customer-insights-bi
+
+paths:
+  raw: data/raw
+  marts: data/marts
+  landing: data/landing
+  sink_receipts: data/sink_receipts
+
+api_source:
+  # JSONPlaceholder — engagement proxy (users, posts, comments); no key required
+  base_url: https://jsonplaceholder.typicode.com
+  users_path: /users
+  posts_path: /posts
+  comments_path: /comments
+  timeout: 20
+  retries: 3
+
+api_sink:
+  local_url: http://127.0.0.1:8089/ingest
+  external_url: https://jsonplaceholder.typicode.com/posts
+  timeout: 20
+  retries: 3
+  post_local: true
+  post_external: true

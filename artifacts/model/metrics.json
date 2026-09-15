@@ -1,0 +1,51 @@
+{
+  "model": "GradientBoostingClassifier",
+  "n_train": 3750,
+  "n_test": 1250,
+  "churn_rate_train": 0.1216,
+  "churn_rate_test": 0.1216,
+  "accuracy": 0.9504,
+  "precision": 0.9090909090909091,
+  "recall": 0.6578947368421053,
+  "f1": 0.7633587786259542,
+  "roc_auc": 0.9631147540983607,
+  "confusion_matrix": [
+    [
+      1088,
+      10
+    ],
+    [
+      52,
+      100
+    ]
+  ],
+  "classification_report": {
+    "0": {
+      "precision": 0.9543859649122807,
+      "recall": 0.9908925318761385,
+      "f1-score": 0.9722966934763181,
+      "support": 1098.0
+    },
+    "1": {
+      "precision": 0.9090909090909091,
+      "recall": 0.6578947368421053,
+      "f1-score": 0.7633587786259542,
+      "support": 152.0
+    },
+    "accuracy": 0.9504,
+    "macro avg": {
+      "precision": 0.9317384370015949,
+      "recall": 0.8243936343591218,
+      "f1-score": 0.8678277360511362,
+      "support": 1250.0
+    },
+    "weighted avg": {
+      "precision": 0.9488780861244018,
+      "recall": 0.9504,
+      "f1-score": 0.9468898430305138,
+      "support": 1250.0
+    }
+  },
+  "cv_roc_auc_mean": 0.9670096413057323,
+  "cv_roc_auc_std": 0.006669131428882972
+}

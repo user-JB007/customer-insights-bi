@@ -6,9 +6,6 @@
 
 ---
 
-
----
-
 ## Power BI Reports
 
 View executive dashboards on GitHub **without Power BI Desktop**. Pipeline marts + churn ML + BI screenshots are all in-repo.

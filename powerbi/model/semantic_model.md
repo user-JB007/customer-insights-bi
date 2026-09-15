@@ -25,3 +25,12 @@ Star-ish layout over curated marts. Two reports share the same model.
 |--------|----------------|
 | Customer Health | customer_360, mrr_movement, retention_monthly |
 | Revenue & Segments | mrr_movement, customer_360, product_revenue, revenue_cohorts |
+
+
+## Support & SLA
+
+| Table | Grain | Key columns |
+|-------|-------|-------------|
+| `fact_support_sla` (`support_sla.csv`) | ticket | event_id, opened_at, resolved_at, sla_due_at, status, priority, reason, channel, csat, sla_status, is_open, age_hours, segment, region |
+
+Relate `fact_support_sla[customer_id]` → `fact_customer_360[customer_id]` (many-to-one).

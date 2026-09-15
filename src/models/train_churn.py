@@ -1,4 +1,4 @@
-"""Train a real customer churn classifier on synthetic feature mart.
+"""Train a real customer churn classifier on feature mart.
 
 Saves model artifact, metrics JSON, feature importance, and holdout predictions.
 """

@@ -5,7 +5,7 @@ CREATE DATABASE IF NOT EXISTS CUSTOMER_INSIGHTS;
 CREATE SCHEMA IF NOT EXISTS CUSTOMER_INSIGHTS.RAW;
 CREATE SCHEMA IF NOT EXISTS CUSTOMER_INSIGHTS.MARTS;
 
--- Example stage + file format for CSV landing (local demo uses Python instead)
+-- Example stage + file format for CSV landing (local run uses Python instead)
 CREATE OR REPLACE FILE FORMAT CUSTOMER_INSIGHTS.RAW.CSV_FF
   TYPE = CSV
   SKIP_HEADER = 1

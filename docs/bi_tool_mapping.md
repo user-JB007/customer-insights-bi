@@ -1,8 +1,8 @@
 # How Marts Feed BI Tools (Power BI primary)
 
-This repo's **primary BI demo is Power BI** (see `powerbi/`). Other tools below are optional mapping notes.
+This repo's **primary BI surface is Power BI** (see `powerbi/`). Other tools below are optional mapping notes.
 
-This project ships **curated analytics marts** (CSV + Parquet locally; Snowflake SQL views for warehouse deployment). No live cloud connection is required for the demo — point your BI tool at the files or deploy the SQL to Snowflake / Databricks SQL.
+This project ships **curated analytics marts** (CSV + Parquet locally; Snowflake SQL views for warehouse deployment). No live cloud connection is required for the local run — point your BI tool at the files or deploy the SQL to Snowflake / Databricks SQL.
 
 ## Mart catalog
 
@@ -35,7 +35,7 @@ This project ships **curated analytics marts** (CSV + Parquet locally; Snowflake
 3. Build:
    - Executive board from `mrr_movement` + `customer_360`
    - Retention heatmap: `retention_monthly` with `months_since_signup` on Columns, `cohort_month` on Rows, `retention_rate` on Color
-4. Extract + scheduled refresh for portfolio demos offline.
+4. Extract + scheduled refresh for analytics workspaces offline.
 
 ## Microsoft Fabric
 

@@ -18,7 +18,7 @@ def run(cmd: list[str]) -> None:
 
 def main() -> None:
     py = sys.executable
-    run([py, "src/data/generate_synthetic.py", "--n-customers", "5000", "--out-dir", "data/raw"])
+    run([py, "src/data/generate_source_data.py", "--n-customers", "5000", "--out-dir", "data/raw"])
     run([py, "src/data/build_marts.py", "--raw-dir", "data/raw", "--out-dir", "data/marts"])
     run([py, "src/models/train_churn.py", "--features", "data/processed/churn_features.csv", "--out-dir", "artifacts/model"])
     run([py, "src/viz/generate_powerbi_pages.py", "--marts", "data/marts", "--artifacts", "artifacts/model", "--out", "powerbi/screenshots"])

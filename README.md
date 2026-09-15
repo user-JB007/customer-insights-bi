@@ -1,32 +1,32 @@
 # Customer Insights BI
 
-**Hire-ready data engineering + analytics portfolio project** — synthetic SaaS customer data, Snowflake-flavored SQL marts, a real churn ML model, and **Power BI** executive reports (screenshots + semantic model / DAX).
+Customer analytics stack for SaaS operations: source extracts → curated marts → churn model → **Power BI** executive reports (screenshots + semantic model / DAX).
 
-📁 **Repo:** https://github.com/user-JB007/customer-insights-bi
+**Repo:** https://github.com/user-JB007/customer-insights-bi
 
 ---
 
 ## Power BI Reports
 
-**Primary BI tool: Power BI.** View two multi-page reports on GitHub **without Power BI Desktop**. Pipeline marts + churn ML + screenshots are all in-repo.
+**Primary BI tool: Power BI.** Two multi-page reports are visible on GitHub without Power BI Desktop. Pipeline marts, churn ML, and screenshots are all in-repo.
 
-### Report A — Customer Health
-Retention, cohorts, and churn risk overview.
-
-| Page | Preview |
-|------|---------|
-| Overview | ![Health Overview](powerbi/screenshots/customer_health_01_overview.png) |
-| Retention | ![Retention](powerbi/screenshots/customer_health_02_retention.png) |
-| Churn Risk | ![Churn Risk](powerbi/screenshots/customer_health_03_churn_risk.png) |
-
-### Report B — Revenue & Segments
-MRR/revenue, segment performance, product & cohort yield.
+### Report 1 — Customer Retention & Growth
+Retention, cohorts, active customers, and growth.
 
 | Page | Preview |
 |------|---------|
-| MRR & Movement | ![MRR](powerbi/screenshots/revenue_segments_01_mrr.png) |
-| Segments | ![Segments](powerbi/screenshots/revenue_segments_02_segments.png) |
-| Product & Cohorts | ![Product](powerbi/screenshots/revenue_segments_03_product.png) |
+| Overview | ![Retention Overview](powerbi/screenshots/retention_01_overview.png) |
+| Cohorts | ![Cohorts](powerbi/screenshots/retention_02_cohorts.png) |
+| Growth | ![Growth](powerbi/screenshots/retention_03_growth.png) |
+
+### Report 2 — Support & SLA Performance
+Support tickets and complaints: satisfaction, within SLA / breached / pending, resolution times and aging.
+
+| Page | Preview |
+|------|---------|
+| Overview | ![Support Overview](powerbi/screenshots/support_01_overview.png) |
+| SLA Performance | ![SLA](powerbi/screenshots/support_02_sla.png) |
+| Pending | ![Pending](powerbi/screenshots/support_03_pending.png) |
 
 **Desktop recreation** (star schema, DAX, page briefs): [`powerbi/README.md`](powerbi/README.md)
 
@@ -34,10 +34,11 @@ MRR/revenue, segment performance, product & cohort yield.
 python src/viz/generate_powerbi_pages.py   # → powerbi/screenshots/ (+ mirror under reports/powerbi/)
 ```
 
+---
 
 ## Problem
 
-SaaS operators need a single customer view: who is growing, who is churning, and which cohorts pay back. This project demonstrates an end-to-end path from raw events → curated marts → churn scoring → executive visuals that a hiring manager or client can clone and run locally (no cloud credentials).
+SaaS operators need a single customer view: who is growing, who is leaving, and how support/SLA performance affects the book. This project runs an end-to-end path from raw events → curated marts → churn scoring → executive visuals that can be rebuilt locally from committed mart CSVs (no cloud credentials required).
 
 ## Architecture
 
@@ -54,14 +55,14 @@ Raw CSV (customers, transactions, support)
 
 See [docs/architecture.md](docs/architecture.md) and [docs/bi_tool_mapping.md](docs/bi_tool_mapping.md).
 
-## Portfolio highlights
+## Deliverables
 
-| Deliverable | What you get |
-|-------------|--------------|
-| **Synthetic data** | 5,000 customers, multi-year transactions & support events with realistic churn drivers |
-| **SQL marts** | Customer 360, retention, revenue cohorts, MRR movement, segment & product marts |
+| Deliverable | Description |
+|-------------|-------------|
+| **Source data** | 5,000 customers, multi-year transactions & support tickets with SLA clocks and CSAT |
+| **SQL marts** | Customer 360, retention, revenue cohorts, MRR movement, segment, product, support/SLA |
 | **Churn ML** | Trained Gradient Boosting model, ROC-AUC / precision / recall, feature importance, holdout preds |
-| **Power BI reports** | 2 multi-page reports (Customer Health · Revenue & Segments) with polished PNGs |
+| **Power BI reports** | 2 multi-page reports (Retention & Growth · Support & SLA) with PNGs |
 | **BI docs** | Semantic model + DAX + page briefs — recreate in Power BI Desktop from mart CSVs |
 | **One command** | `python run_pipeline.py` regenerates everything |
 
@@ -80,16 +81,16 @@ python run_pipeline.py
 
 Outputs:
 
-- `data/raw/` — synthetic source tables  
-- `data/marts/` — curated CSV + Parquet marts  
-- `data/processed/churn_features.*` — ML feature table  
-- `artifacts/model/` — `churn_model.joblib`, `metrics.json`, `EVALUATION.md`  
-- `powerbi/screenshots/` — Power BI report PNGs (2 reports × 3 pages)  
+- `data/raw/` — source tables
+- `data/marts/` — curated CSV + Parquet marts
+- `data/processed/churn_features.*` — ML feature table
+- `artifacts/model/` — `churn_model.joblib`, `metrics.json`, `EVALUATION.md`
+- `powerbi/screenshots/` — Power BI report PNGs (2 reports × 3 pages)
 
 ### Run steps individually
 
 ```bash
-python src/data/generate_synthetic.py --n-customers 5000
+python src/data/generate_source_data.py --n-customers 5000
 python src/data/build_marts.py
 python src/models/train_churn.py
 python src/viz/generate_powerbi_pages.py
@@ -104,7 +105,7 @@ customer-insights-bi/
 ├── run_pipeline.py
 ├── artifacts/model/          # trained model + metrics
 ├── data/
-│   ├── raw/                  # synthetic sources
+│   ├── raw/                  # source extracts
 │   ├── processed/            # ML features
 │   └── marts/                # curated analytics tables
 ├── docs/
@@ -123,12 +124,12 @@ customer-insights-bi/
 
 ## Model notes
 
-- Algorithm: `GradientBoostingClassifier` (scikit-learn) with scaled numerics + one-hot categoricals  
-- Target: `is_churned`  
-- Features: tenure, usage, NPS, support tickets, payment failures, health score, plan/segment/region/channel, revenue aggregates  
-- Evaluation: stratified holdout + 5-fold CV ROC-AUC; full write-up in `artifacts/model/EVALUATION.md`  
+- Algorithm: `GradientBoostingClassifier` (scikit-learn) with scaled numerics + one-hot categoricals
+- Target: `is_churned`
+- Features: tenure, usage, NPS, support tickets, payment failures, health score, plan/segment/region/channel, revenue aggregates
+- Evaluation: stratified holdout + 5-fold CV ROC-AUC; full write-up in `artifacts/model/EVALUATION.md`
 
-This is a **real trained model** on synthetic data designed with identifiable signal — not a stub.
+This is a trained model on source data designed with identifiable signal — not a stub.
 
 ## SQL / warehouse
 
@@ -136,4 +137,4 @@ Deploy `sql/marts/00_setup.sql` through `06_product_revenue.sql` to Snowflake. L
 
 ## License
 
-MIT — use freely in portfolios and client demos. Data is synthetic; no PII.
+MIT — no PII in committed extracts.

@@ -1,6 +1,6 @@
 """Build curated analytics marts from raw CSVs (local stand-in for Snowflake SQL).
 
-Mirrors the logic in sql/marts/*.sql so the portfolio runs fully offline while
+Mirrors the logic in sql/marts/*.sql so the project runs fully offline while
 the SQL files remain the source of truth for warehouse deployment.
 """
 from __future__ import annotations
@@ -15,7 +15,18 @@ import pandas as pd
 def load_raw(raw_dir: Path) -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:
     customers = pd.read_csv(raw_dir / "customers.csv", parse_dates=["signup_date", "churn_date", "as_of_date"])
     transactions = pd.read_csv(raw_dir / "transactions.csv", parse_dates=["txn_date"])
-    support = pd.read_csv(raw_dir / "support_events.csv", parse_dates=["created_at"])
+    support = pd.read_csv(raw_dir / "support_events.csv")
+    if "opened_at" in support.columns:
+        support["opened_at"] = pd.to_datetime(support["opened_at"])
+        support["resolved_at"] = pd.to_datetime(support["resolved_at"], errors="coerce")
+        support["sla_due_at"] = pd.to_datetime(support["sla_due_at"], errors="coerce")
+        support["created_at"] = support["opened_at"].dt.normalize()
+    else:
+        support["created_at"] = pd.to_datetime(support["created_at"])
+    if "resolved_hours" in support.columns:
+        support["resolved_hours"] = pd.to_numeric(support["resolved_hours"], errors="coerce")
+    if "csat" in support.columns:
+        support["csat"] = pd.to_numeric(support["csat"], errors="coerce")
     return customers, transactions, support
 
 
@@ -140,6 +151,48 @@ def mart_mrr_movement(customers: pd.DataFrame, transactions: pd.DataFrame) -> pd
     return df
 
 
+
+def mart_support_sla(support: pd.DataFrame, customers: pd.DataFrame) -> pd.DataFrame:
+    """Ticket-level support & SLA performance for the Support report."""
+    s = support.copy()
+    if "opened_at" not in s.columns:
+        s["opened_at"] = pd.to_datetime(s["created_at"])
+        s["resolved_at"] = s["opened_at"] + pd.to_timedelta(s["resolved_hours"].fillna(24), unit="h")
+        s["sla_due_at"] = s["opened_at"] + pd.to_timedelta(48, unit="h")
+        s["status"] = "resolved"
+        s["reason"] = s.get("category", "General")
+        s["channel"] = "email"
+        s["csat"] = np.nan
+        s["priority"] = s.get("priority", "medium")
+
+    as_of = s["opened_at"].max() + pd.Timedelta(days=1)
+    open_mask = s["status"].isin(["pending", "escalated"]) | s["resolved_at"].isna()
+    s["is_open"] = open_mask.astype(int)
+    s["age_hours"] = ((s["resolved_at"].fillna(as_of) - s["opened_at"]).dt.total_seconds() / 3600).round(2)
+    if "resolved_hours" not in s.columns or s["resolved_hours"].isna().all():
+        s["resolved_hours"] = np.where(~open_mask, s["age_hours"], np.nan)
+    s["sla_breach"] = (
+        (~open_mask & (s["resolved_at"] > s["sla_due_at"]))
+        | (open_mask & (as_of > s["sla_due_at"]))
+    )
+    s["sla_status"] = "within_sla"
+    s.loc[s["sla_breach"] & ~open_mask, "sla_status"] = "beyond_sla"
+    s.loc[open_mask & ~s["sla_breach"], "sla_status"] = "pending_within_sla"
+    s.loc[open_mask & s["sla_breach"], "sla_status"] = "pending_beyond_sla"
+    s["opened_date"] = s["opened_at"].dt.date.astype(str)
+
+    cust_cols = [c for c in ["customer_id", "segment", "region", "plan"] if c in customers.columns]
+    s = s.merge(customers[cust_cols], on="customer_id", how="left")
+    keep = [
+        c for c in [
+            "event_id", "customer_id", "opened_at", "resolved_at", "sla_due_at", "opened_date",
+            "status", "priority", "reason", "category", "channel", "csat", "resolved_hours",
+            "age_hours", "is_open", "sla_breach", "sla_status", "segment", "region", "plan",
+        ] if c in s.columns
+    ]
+    return s[keep].copy()
+
+
 def mart_segment_performance(c360: pd.DataFrame) -> pd.DataFrame:
     g = (
         c360.groupby(["segment", "region", "plan"], as_index=False)
@@ -188,6 +241,7 @@ def main() -> None:
     mrr = mart_mrr_movement(customers, transactions)
     segments = mart_segment_performance(c360)
     products = mart_product_revenue(transactions)
+    support_sla = mart_support_sla(support, customers)
 
     outputs = {
         "customer_360": c360,
@@ -196,6 +250,7 @@ def main() -> None:
         "mrr_movement": mrr,
         "segment_performance": segments,
         "product_revenue": products,
+        "support_sla": support_sla,
     }
     for name, df in outputs.items():
         csv_path = args.out_dir / f"{name}.csv"

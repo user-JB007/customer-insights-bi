@@ -1,8 +1,8 @@
 """Generate Power BI–styled report page PNGs for GitHub visitors.
 
 Exactly TWO reports (multi-page each):
-  A) Customer Health — retention, cohorts, churn risk
-  B) Revenue & Segments — MRR, segments, product & risk
+  A) Customer Retention & Growth — retention, cohorts, active customers
+  B) Support & SLA Performance — tickets, CSAT, within/beyond SLA, pending
 
 Writes under powerbi/screenshots/ (and optionally reports/powerbi/screenshots/).
 
@@ -49,8 +49,8 @@ plt.rcParams.update(
     }
 )
 
-HEALTH_TABS = ["Overview", "Retention", "Churn Risk"]
-REVENUE_TABS = ["MRR & Movement", "Segments", "Product & Risk"]
+RETENTION_TABS = ["Overview", "Cohorts", "Growth"]
+SUPPORT_TABS = ["Overview", "SLA Performance", "Pending"]
 
 
 def _chrome(
@@ -60,6 +60,7 @@ def _chrome(
     page_idx: int,
     title: str,
     filters: str,
+    dept: str = "Customer Insights · Retention",
 ) -> None:
     fig.patches.append(
         mpatches.FancyBboxPatch(
@@ -79,7 +80,7 @@ def _chrome(
              fontweight="bold", va="center", transform=fig.transFigure)
     fig.text(0.02, 0.918, title, fontsize=14, color=PBI_WHITE, fontweight="bold",
              va="center", transform=fig.transFigure)
-    fig.text(0.98, 0.935, "Power BI · Portfolio Demo", fontsize=8, color="#A19F9D",
+    fig.text(0.98, 0.935, dept, fontsize=8, color="#A19F9D",
              ha="right", va="center", transform=fig.transFigure)
 
     fig.patches.append(
@@ -128,15 +129,16 @@ def _kpi_card(ax, value: str, label: str, accent: str) -> None:
             color=PBI_GRAY, transform=ax.transAxes)
 
 
-# ── Report A: Customer Health ───────────────────────────────────────────────
+# ── Report A: Customer Retention & Growth ───────────────────────────────────
 
-def health_01_overview(marts: Path, out: Path) -> None:
+def retention_01_overview(marts: Path, out: Path) -> None:
     mrr = pd.read_csv(marts / "mrr_movement.csv")
     c360 = pd.read_csv(marts / "customer_360.csv")
     fig = plt.figure(figsize=(14.5, 9.2), facecolor=PBI_LIGHT)
-    _chrome(fig, "Customer Health Report", HEALTH_TABS, 0,
-            "Retention & Churn Overview",
-            "As-of: latest month  ·  Segment: All  ·  Region: All  ·  Plan: All")
+    _chrome(fig, "Customer Retention & Growth", RETENTION_TABS, 0,
+            "Active Book & Retention Overview",
+            "As-of: latest month  ·  Segment: All  ·  Region: All  ·  Plan: All",
+            dept="Customer Insights · Retention")
     gs = fig.add_gridspec(3, 4, left=0.05, right=0.97, top=0.83, bottom=0.07,
                           hspace=0.42, wspace=0.32)
 
@@ -144,39 +146,39 @@ def health_01_overview(marts: Path, out: Path) -> None:
     prev = mrr.iloc[-2] if len(mrr) > 1 else latest
     mom = (latest["mrr"] - prev["mrr"]) / prev["mrr"] * 100 if prev["mrr"] else 0
     active = int(c360["is_active"].sum()) if "is_active" in c360.columns else int(latest["active_customers"])
-    churned = int(c360["is_churned"].sum())
+    retained_proxy = 100 - latest["logo_churn_rate"] * 100
     kpis = [
         (f"{active:,}", "Active Customers", PBI_TEAL),
+        (f"{retained_proxy:.1f}%", "Logo Retention (mo)", PBI_NAVY),
         (f"{latest['logo_churn_rate']*100:.1f}%", "Logo Churn (mo)", PBI_RED),
-        (f"{churned:,}", "Churned (lifetime)", PBI_ORANGE),
-        (f"{mom:+.1f}%", "MRR MoM", PBI_NAVY),
+        (f"{mom:+.1f}%", "MRR MoM Growth", PBI_ORANGE),
     ]
     for i, (v, lab, c) in enumerate(kpis):
         _kpi_card(fig.add_subplot(gs[0, i]), v, lab, c)
 
     ax1 = fig.add_subplot(gs[1, :2])
-    ax1.plot(range(len(mrr)), mrr["logo_churn_rate"] * 100, color=PBI_RED, linewidth=2.2)
-    ax1.fill_between(range(len(mrr)), mrr["logo_churn_rate"] * 100, color=PBI_RED, alpha=0.15)
-    ax1.set_title("Monthly Logo Churn Rate (%)", fontsize=11, fontweight="bold", loc="left")
+    ax1.plot(range(len(mrr)), (1 - mrr["logo_churn_rate"]) * 100, color=PBI_TEAL, linewidth=2.2)
+    ax1.fill_between(range(len(mrr)), (1 - mrr["logo_churn_rate"]) * 100, color=PBI_TEAL, alpha=0.15)
+    ax1.set_title("Monthly Logo Retention Rate (%)", fontsize=11, fontweight="bold", loc="left")
     step = max(len(mrr) // 8, 1)
     ax1.set_xticks(range(0, len(mrr), step))
     ax1.set_xticklabels(mrr["month"].iloc[::step], rotation=30, ha="right", fontsize=7)
-    ax1.set_ylabel("Churn %", fontsize=8)
+    ax1.set_ylabel("Retention %", fontsize=8)
     ax1.grid(axis="y", alpha=0.25)
 
     ax2 = fig.add_subplot(gs[1, 2:])
-    by_seg = c360.groupby("segment").agg(churn=("is_churned", "mean")).reindex(
-        ["Enterprise", "Mid-Market", "SMB", "Startup"]
-    ).dropna(how="all")
+    by_seg = c360.groupby("segment").agg(
+        active=("is_active", "sum"), total=("customer_id", "count")
+    )
+    by_seg["active_rate"] = by_seg["active"] / by_seg["total"] * 100
+    by_seg = by_seg.reindex(["Enterprise", "Mid-Market", "SMB", "Startup"]).dropna(how="all")
     if by_seg.empty:
-        by_seg = c360.groupby("segment").agg(churn=("is_churned", "mean"))
-    colors = [PBI_TEAL, PBI_NAVY, PBI_ORANGE, PBI_RED][: len(by_seg)]
-    bars = ax2.barh(by_seg.index, by_seg["churn"] * 100, color=colors)
-    ax2.set_xlabel("Churn Rate (%)", fontsize=8)
-    ax2.set_title("Churn Rate by Segment", fontsize=11, fontweight="bold", loc="left")
-    for bar, v in zip(bars, by_seg["churn"] * 100):
-        ax2.text(v + 0.3, bar.get_y() + bar.get_height() / 2, f"{v:.1f}%", va="center", fontsize=8)
-    ax2.set_xlim(0, max(by_seg["churn"] * 100) * 1.35 if len(by_seg) else 1)
+        by_seg = c360.groupby("segment").agg(active=("is_active", "sum"), total=("customer_id", "count"))
+        by_seg["active_rate"] = by_seg["active"] / by_seg["total"] * 100
+    colors = [PBI_TEAL, PBI_NAVY, PBI_ORANGE, PBI_PURPLE][: len(by_seg)]
+    ax2.barh(by_seg.index, by_seg["active_rate"], color=colors)
+    ax2.set_xlabel("Active Rate (%)", fontsize=8)
+    ax2.set_title("Active Rate by Segment", fontsize=11, fontweight="bold", loc="left")
     ax2.grid(axis="x", alpha=0.25)
 
     ax3 = fig.add_subplot(gs[2, :2])
@@ -190,29 +192,29 @@ def health_01_overview(marts: Path, out: Path) -> None:
     ax3.grid(axis="y", alpha=0.25)
 
     ax4 = fig.add_subplot(gs[2, 2:])
-    health = c360["customer_health_score"].dropna()
-    ax4.hist(health, bins=30, color=PBI_NAVY, alpha=0.85, edgecolor="white")
-    ax4.axvline(45, color=PBI_RED, linestyle="--", linewidth=1.2, label="At-risk < 45")
-    ax4.set_title("Customer Health Score Distribution", fontsize=11, fontweight="bold", loc="left")
-    ax4.set_xlabel("Health Score")
-    ax4.legend(fontsize=7, frameon=False)
+    ax4.fill_between(range(len(mrr)), mrr["active_customers"], color=PBI_NAVY, alpha=0.25)
+    ax4.plot(range(len(mrr)), mrr["active_customers"], color=PBI_NAVY, linewidth=2.2)
+    ax4.set_title("Active Customers Over Time", fontsize=11, fontweight="bold", loc="left")
+    ax4.set_xticks(range(0, len(mrr), step))
+    ax4.set_xticklabels(mrr["month"].iloc[::step], rotation=30, ha="right", fontsize=7)
     ax4.grid(axis="y", alpha=0.25)
 
-    fig.savefig(out / "customer_health_01_overview.png")
+    fig.savefig(out / "retention_01_overview.png")
     plt.close(fig)
-    print("  wrote customer_health_01_overview.png")
+    print("  wrote retention_01_overview.png")
 
 
-def health_02_retention(marts: Path, out: Path) -> None:
+def retention_02_cohorts(marts: Path, out: Path) -> None:
     ret = pd.read_csv(marts / "retention_monthly.csv")
     pivot = ret.pivot_table(
         index="cohort_month", columns="months_since_signup",
         values="retention_rate", aggfunc="mean",
     ).tail(18).iloc[:, :13]
     fig = plt.figure(figsize=(14.5, 9.2), facecolor=PBI_LIGHT)
-    _chrome(fig, "Customer Health Report", HEALTH_TABS, 1,
+    _chrome(fig, "Customer Retention & Growth", RETENTION_TABS, 1,
             "Retention Cohorts",
-            "Cohort window: last 18 months  ·  Months since signup: 0–12")
+            "Cohort window: last 18 months  ·  Months since signup: 0–12",
+            dept="Customer Insights · Retention")
     ax = fig.add_axes([0.10, 0.10, 0.80, 0.70])
     sns.heatmap(pivot * 100, ax=ax, cmap="RdYlGn", vmin=40, vmax=100, annot=True, fmt=".0f",
                 annot_kws={"size": 7}, linewidths=0.4, linecolor="white",
@@ -220,255 +222,272 @@ def health_02_retention(marts: Path, out: Path) -> None:
     ax.set_xlabel("Months Since Signup")
     ax.set_ylabel("Signup Cohort")
     ax.set_title("Logo Retention Heatmap", fontsize=12, fontweight="bold", loc="left", pad=10)
-    fig.savefig(out / "customer_health_02_retention.png")
+    fig.savefig(out / "retention_02_cohorts.png")
     plt.close(fig)
-    print("  wrote customer_health_02_retention.png")
+    print("  wrote retention_02_cohorts.png")
 
 
-def health_03_churn_risk(marts: Path, artifacts: Path, out: Path) -> None:
+def retention_03_growth(marts: Path, out: Path) -> None:
+    mrr = pd.read_csv(marts / "mrr_movement.csv")
     c360 = pd.read_csv(marts / "customer_360.csv")
-    metrics_path = artifacts / "metrics.json"
-    metrics = json.loads(metrics_path.read_text()) if metrics_path.exists() else None
     fig = plt.figure(figsize=(14.5, 9.2), facecolor=PBI_LIGHT)
-    filt = "Active book risk flags  ·  Health / payment / engagement"
-    if metrics:
-        filt += f"  ·  Model ROC-AUC {metrics.get('roc_auc', 0):.3f}"
-    _chrome(fig, "Customer Health Report", HEALTH_TABS, 2,
-            "Churn Risk Overview", filt)
+    _chrome(fig, "Customer Retention & Growth", RETENTION_TABS, 2,
+            "Growth Drivers & Book Composition",
+            "Net new logos · MRR growth · Plan / region mix",
+            dept="Customer Insights · Retention")
     gs = fig.add_gridspec(2, 2, left=0.07, right=0.96, top=0.82, bottom=0.08,
                           hspace=0.38, wspace=0.28)
-
-    risk = c360[(c360["is_churned"] == 0) & (c360["mrr"] > 0)].copy()
-    risk["risk_flag"] = (
-        (risk["customer_health_score"] < 45)
-        | (risk["payment_failures_90d"] >= 2)
-        | (risk["monthly_active_days"] < 5)
-    )
 
     ax1 = fig.add_subplot(gs[0, 0])
-    counts = risk["risk_flag"].value_counts()
-    ax1.pie(
-        [counts.get(False, 0), counts.get(True, 0)],
-        labels=["Healthy Active", "At-Risk Active"], autopct="%1.1f%%",
-        colors=[PBI_TEAL, PBI_RED], startangle=90, textprops={"fontsize": 9},
-        wedgeprops={"edgecolor": "white", "linewidth": 2},
-    )
-    ax1.set_title("Active Book — Risk Split", fontsize=11, fontweight="bold")
-
-    ax2 = fig.add_subplot(gs[0, 1])
-    channel = c360.groupby("acquisition_channel").agg(churn=("is_churned", "mean")).sort_values("churn")
-    ax2.bar(channel.index, channel["churn"] * 100,
-            color=[PBI_TEAL if v < 0.25 else PBI_RED for v in channel["churn"]])
-    ax2.set_title("Churn Rate by Acquisition Channel", fontsize=11, fontweight="bold", loc="left")
-    ax2.set_ylabel("Churn %")
-    ax2.tick_params(axis="x", rotation=25)
-    ax2.grid(axis="y", alpha=0.25)
-
-    ax3 = fig.add_subplot(gs[1, :])
-    ax3.axis("off")
-    top_risk = risk[risk["risk_flag"]].nlargest(10, "mrr")[
-        ["customer_id", "segment", "plan", "mrr", "customer_health_score", "region"]
-    ]
-    ax3.text(0.0, 1.0, "Priority Outreach (highest MRR at-risk)", fontsize=12, fontweight="bold",
-             color=PBI_DARK, transform=ax3.transAxes, va="top")
-    header = f"{'ID':<10} {'Segment':<12} {'Plan':<10} {'MRR':>8} {'Health':>7} {'Region'}"
-    ax3.text(0.0, 0.88, header, fontsize=9, family="monospace", color=PBI_GRAY,
-             transform=ax3.transAxes, va="top")
-    lines = [
-        f"{r['customer_id']:<10} {r['segment']:<12} {r['plan']:<10} ${r['mrr']:>7.0f} "
-        f"{r['customer_health_score']:>7.0f} {r['region']}"
-        for _, r in top_risk.iterrows()
-    ]
-    ax3.text(0.0, 0.78, "\n".join(lines), fontsize=9, family="monospace", color=PBI_DARK,
-             transform=ax3.transAxes, va="top",
-             bbox=dict(boxstyle="round,pad=0.5", facecolor=PBI_WHITE, edgecolor=PBI_RED, linewidth=1.2))
-
-    fig.savefig(out / "customer_health_03_churn_risk.png")
-    plt.close(fig)
-    print("  wrote customer_health_03_churn_risk.png")
-
-
-# ── Report B: Revenue & Segments ────────────────────────────────────────────
-
-def revenue_01_mrr(marts: Path, out: Path) -> None:
-    mrr = pd.read_csv(marts / "mrr_movement.csv")
-    rev = pd.read_csv(marts / "revenue_cohorts.csv")
-    fig = plt.figure(figsize=(14.5, 9.2), facecolor=PBI_LIGHT)
-    _chrome(fig, "Revenue & Segments Report", REVENUE_TABS, 0,
-            "MRR, ARR & Revenue Cohorts",
-            "As-of: latest month  ·  Metric: MRR / revenue per customer")
-    gs = fig.add_gridspec(2, 2, left=0.07, right=0.96, top=0.82, bottom=0.08,
-                          hspace=0.38, wspace=0.28)
-
-    latest = mrr.iloc[-1]
-    prev = mrr.iloc[-2] if len(mrr) > 1 else latest
-    mom = (latest["mrr"] - prev["mrr"]) / prev["mrr"] * 100 if prev["mrr"] else 0
-
-    # KPI strip via text cards in top row — use nested gridspec mentally
-    ax_kpi = fig.add_subplot(gs[0, :])
-    ax_kpi.axis("off")
-    cards = [
-        (f"${latest['arr']/1e6:.2f}M", "ARR", PBI_TEAL),
-        (f"${latest['mrr']/1e3:.0f}K", "MRR", PBI_NAVY),
-        (f"{mom:+.1f}%", "MRR MoM", PBI_ORANGE),
-        (f"${latest['net_new_mrr']/1e3:.0f}K", "Net New MRR", PBI_PURPLE),
-    ]
-    for i, (val, lab, accent) in enumerate(cards):
-        x0 = 0.02 + i * 0.245
-        ax_kpi.add_patch(plt.Rectangle(
-            (x0, 0.15), 0.22, 0.7, transform=ax_kpi.transAxes,
-            facecolor=PBI_WHITE, edgecolor=PBI_BORDER, linewidth=1.2,
-        ))
-        ax_kpi.add_patch(plt.Rectangle(
-            (x0, 0.15), 0.012, 0.7, transform=ax_kpi.transAxes,
-            facecolor=accent, edgecolor="none",
-        ))
-        ax_kpi.text(x0 + 0.11, 0.58, val, ha="center", va="center", fontsize=16,
-                    fontweight="bold", transform=ax_kpi.transAxes)
-        ax_kpi.text(x0 + 0.11, 0.30, lab, ha="center", va="center", fontsize=8,
-                    color=PBI_GRAY, transform=ax_kpi.transAxes)
-
-    ax1 = fig.add_subplot(gs[1, 0])
-    ax1.fill_between(range(len(mrr)), mrr["mrr"] / 1000, color=PBI_TEAL, alpha=0.25)
-    ax1.plot(range(len(mrr)), mrr["mrr"] / 1000, color=PBI_TEAL, linewidth=2.2)
-    ax1.set_title("Monthly Recurring Revenue ($K)", fontsize=11, fontweight="bold", loc="left")
+    net_new = mrr["new_customers"] - mrr["churned_customers"]
+    colors = [PBI_TEAL if v >= 0 else PBI_RED for v in net_new]
+    ax1.bar(range(len(mrr)), net_new, color=colors, alpha=0.9)
+    ax1.axhline(0, color=PBI_GRAY, linewidth=0.8)
+    ax1.set_title("Net New Logos by Month", fontsize=11, fontweight="bold", loc="left")
     step = max(len(mrr) // 8, 1)
     ax1.set_xticks(range(0, len(mrr), step))
     ax1.set_xticklabels(mrr["month"].iloc[::step], rotation=30, ha="right", fontsize=7)
-    ax1.set_ylabel("MRR ($K)", fontsize=8)
     ax1.grid(axis="y", alpha=0.25)
 
-    ax2 = fig.add_subplot(gs[1, 1])
-    ax2.bar(range(len(mrr)), mrr["new_mrr"] / 1000, color=PBI_TEAL, alpha=0.9, label="New MRR")
-    ax2.bar(range(len(mrr)), -mrr["churned_mrr"] / 1000, color=PBI_RED, alpha=0.9, label="Churned MRR")
-    ax2.axhline(0, color=PBI_GRAY, linewidth=0.8)
-    ax2.set_title("MRR Movement: New vs Churned ($K)", fontsize=11, fontweight="bold", loc="left")
+    ax2 = fig.add_subplot(gs[0, 1])
+    ax2.fill_between(range(len(mrr)), mrr["mrr"] / 1000, color=PBI_TEAL, alpha=0.25)
+    ax2.plot(range(len(mrr)), mrr["mrr"] / 1000, color=PBI_TEAL, linewidth=2.2)
+    ax2.set_title("MRR Growth ($K)", fontsize=11, fontweight="bold", loc="left")
     ax2.set_xticks(range(0, len(mrr), step))
     ax2.set_xticklabels(mrr["month"].iloc[::step], rotation=30, ha="right", fontsize=7)
-    ax2.legend(fontsize=7, frameon=False)
+    ax2.set_ylabel("MRR ($K)")
     ax2.grid(axis="y", alpha=0.25)
 
-    # Add cohort curve as inset? Keep 2x2 clean — already used both bottom cells.
-    # Re-layout: put cohort tip in KPI area already filled. Fine for page 01.
-
-    fig.savefig(out / "revenue_segments_01_mrr.png")
-    plt.close(fig)
-    print("  wrote revenue_segments_01_mrr.png")
-
-    # Extra small cohort visual is on page 02/03; optionally enhance page 01 with cohort curve
-    # by regenerating with 3-row layout — keep as is for clarity.
-
-
-def revenue_02_segments(marts: Path, out: Path) -> None:
-    c360 = pd.read_csv(marts / "customer_360.csv")
-    fig = plt.figure(figsize=(14.5, 9.2), facecolor=PBI_LIGHT)
-    _chrome(fig, "Revenue & Segments Report", REVENUE_TABS, 1,
-            "Segment Performance",
-            "Book of business  ·  Active + churned  ·  Health vs MRR")
-    gs = fig.add_gridspec(2, 2, left=0.07, right=0.96, top=0.82, bottom=0.08,
-                          hspace=0.38, wspace=0.28)
-
-    ax1 = fig.add_subplot(gs[0, 0])
-    g = c360.groupby("region").agg(mrr=("mrr", "sum")).sort_values("mrr", ascending=True)
-    ax1.barh(g.index, g["mrr"] / 1000, color=PBI_NAVY)
-    ax1.set_title("MRR by Region ($K)", fontsize=11, fontweight="bold", loc="left")
-    ax1.set_xlabel("MRR ($K)")
-    ax1.grid(axis="x", alpha=0.25)
-
-    ax2 = fig.add_subplot(gs[0, 1])
-    sample = c360.sample(min(1500, len(c360)), random_state=42)
-    sc = ax2.scatter(
-        sample["customer_health_score"], sample["mrr"], c=sample["is_churned"],
-        cmap="coolwarm", alpha=0.45, s=16, edgecolors="none",
-    )
-    ax2.set_title("Health Score vs MRR (color = churned)", fontsize=11, fontweight="bold", loc="left")
-    ax2.set_xlabel("Customer Health Score")
-    ax2.set_ylabel("MRR ($)")
-    fig.colorbar(sc, ax=ax2, fraction=0.046).set_label("Churned")
-    ax2.grid(alpha=0.25)
-
     ax3 = fig.add_subplot(gs[1, 0])
-    plan_mrr = (
-        c360.groupby("plan")["mrr"].sum()
+    active = c360[c360["is_active"] == 1] if "is_active" in c360.columns else c360
+    plan_counts = (
+        active.groupby("plan")["customer_id"].count()
         .reindex(["Free", "Starter", "Pro", "Business", "Enterprise"])
         .fillna(0)
     )
     ax3.pie(
-        plan_mrr.clip(lower=0.01), labels=plan_mrr.index, autopct="%1.0f%%",
+        plan_counts.clip(lower=0.01), labels=plan_counts.index, autopct="%1.0f%%",
         colors=[PBI_LIGHT, PBI_ORANGE, PBI_NAVY, PBI_PURPLE, PBI_TEAL],
         textprops={"fontsize": 8}, startangle=90,
         wedgeprops={"edgecolor": "white", "linewidth": 1.5},
     )
-    ax3.set_title("MRR Mix by Plan", fontsize=11, fontweight="bold")
+    ax3.set_title("Active Customers by Plan", fontsize=11, fontweight="bold")
 
     ax4 = fig.add_subplot(gs[1, 1])
-    plans = ["Free", "Starter", "Pro", "Business", "Enterprise"]
-    box_data = [c360.loc[c360["plan"] == p, "customer_health_score"].dropna() for p in plans]
-    bp = ax4.boxplot(box_data, tick_labels=plans, patch_artist=True)
-    for patch, c in zip(bp["boxes"], [PBI_LIGHT, PBI_ORANGE, PBI_NAVY, PBI_PURPLE, PBI_TEAL]):
-        patch.set_facecolor(c)
-        patch.set_alpha(0.9)
-    ax4.set_title("Health Score by Plan", fontsize=11, fontweight="bold", loc="left")
-    ax4.set_ylabel("Health Score")
+    g = active.groupby("region").agg(customers=("customer_id", "count")).sort_values("customers")
+    ax4.barh(g.index, g["customers"], color=PBI_NAVY)
+    ax4.set_title("Active Customers by Region", fontsize=11, fontweight="bold", loc="left")
+    ax4.set_xlabel("Customers")
+    ax4.grid(axis="x", alpha=0.25)
+
+    fig.savefig(out / "retention_03_growth.png")
+    plt.close(fig)
+    print("  wrote retention_03_growth.png")
+
+
+# ── Report B: Support & SLA Performance ─────────────────────────────────────
+
+def _load_support(marts: Path) -> pd.DataFrame:
+    path = marts / "support_sla.csv"
+    if not path.exists():
+        raise FileNotFoundError(f"Missing {path}. Rebuild marts after regenerating support extracts.")
+    return pd.read_csv(path)
+
+
+def support_01_overview(marts: Path, out: Path) -> None:
+    svc = _load_support(marts)
+    svc["opened_at"] = pd.to_datetime(svc["opened_at"])
+    total = len(svc)
+    open_n = int(svc["is_open"].sum()) if "is_open" in svc.columns else 0
+    avg_csat = float(svc["csat"].dropna().mean()) if "csat" in svc.columns and svc["csat"].notna().any() else 0.0
+    within = int((svc["sla_status"] == "within_sla").sum()) if "sla_status" in svc.columns else 0
+    resolved_n = int((svc["is_open"] == 0).sum()) if "is_open" in svc.columns else total
+    within_pct = within / max(resolved_n, 1) * 100
+
+    fig = plt.figure(figsize=(14.5, 9.2), facecolor=PBI_LIGHT)
+    _chrome(fig, "Support & SLA Performance", SUPPORT_TABS, 0,
+            "Ticket Volume & Satisfaction",
+            "As-of: latest  ·  Segment: All  ·  Channel: All  ·  Priority: All",
+            dept="Customer Insights · Support")
+    gs = fig.add_gridspec(3, 4, left=0.05, right=0.97, top=0.83, bottom=0.07,
+                          hspace=0.42, wspace=0.32)
+    kpis = [
+        (f"{total:,}", "Tickets Opened", PBI_NAVY),
+        (f"{avg_csat:.2f}", "Avg CSAT (1–5)", PBI_TEAL),
+        (f"{within_pct:.0f}%", "Resolved Within SLA", PBI_TEAL),
+        (f"{open_n:,}", "Still Pending", PBI_ORANGE),
+    ]
+    for i, (v, lab, c) in enumerate(kpis):
+        _kpi_card(fig.add_subplot(gs[0, i]), v, lab, c)
+
+    ax1 = fig.add_subplot(gs[1, :2])
+    daily = svc.groupby(svc["opened_at"].dt.to_period("M").astype(str)).size()
+    ax1.bar(range(len(daily)), daily.values, color=PBI_NAVY, alpha=0.85)
+    ax1.set_title("Tickets Opened by Month", fontsize=11, fontweight="bold", loc="left")
+    step = max(len(daily) // 8, 1)
+    ax1.set_xticks(range(0, len(daily), step))
+    ax1.set_xticklabels(daily.index[::step], rotation=30, ha="right", fontsize=7)
+    ax1.grid(axis="y", alpha=0.25)
+
+    ax2 = fig.add_subplot(gs[1, 2:])
+    reason_col = "reason" if "reason" in svc.columns else "category"
+    by_reason = svc[reason_col].value_counts().sort_values(ascending=True)
+    ax2.barh(by_reason.index, by_reason.values, color=PBI_PURPLE)
+    ax2.set_title("Tickets by Reason", fontsize=11, fontweight="bold", loc="left")
+    ax2.grid(axis="x", alpha=0.25)
+
+    ax3 = fig.add_subplot(gs[2, :2])
+    if "channel" in svc.columns:
+        by_ch = svc["channel"].value_counts()
+        ax3.pie(by_ch, labels=by_ch.index, autopct="%1.0f%%",
+                colors=[PBI_TEAL, PBI_NAVY, PBI_ORANGE, PBI_PURPLE][: len(by_ch)],
+                textprops={"fontsize": 9}, startangle=90,
+                wedgeprops={"edgecolor": "white", "linewidth": 1.5})
+    ax3.set_title("Tickets by Channel", fontsize=11, fontweight="bold")
+
+    ax4 = fig.add_subplot(gs[2, 2:])
+    if "csat" in svc.columns and svc["csat"].notna().any():
+        csat = svc["csat"].dropna().astype(int)
+        counts = csat.value_counts().reindex([1, 2, 3, 4, 5], fill_value=0)
+        ax4.bar(counts.index.astype(str), counts.values,
+                color=[PBI_RED, PBI_ORANGE, PBI_YELLOW, PBI_TEAL, "#107C10"])
+    ax4.set_title("CSAT Score Distribution", fontsize=11, fontweight="bold", loc="left")
+    ax4.set_xlabel("CSAT")
     ax4.grid(axis="y", alpha=0.25)
 
-    fig.savefig(out / "revenue_segments_02_segments.png")
+    fig.savefig(out / "support_01_overview.png")
     plt.close(fig)
-    print("  wrote revenue_segments_02_segments.png")
+    print("  wrote support_01_overview.png")
 
 
-def revenue_03_product_risk(marts: Path, out: Path) -> None:
-    prod = pd.read_csv(marts / "product_revenue.csv")
-    rev = pd.read_csv(marts / "revenue_cohorts.csv")
+def support_02_sla(marts: Path, out: Path) -> None:
+    svc = _load_support(marts)
     fig = plt.figure(figsize=(14.5, 9.2), facecolor=PBI_LIGHT)
-    _chrome(fig, "Revenue & Segments Report", REVENUE_TABS, 2,
-            "Product Revenue & Cohort Yield",
-            "Product mix · Revenue per customer by tenure")
+    _chrome(fig, "Support & SLA Performance", SUPPORT_TABS, 1,
+            "SLA Attainment & Resolution Times",
+            "Within SLA · Breached · By priority & segment",
+            dept="Customer Insights · Support")
     gs = fig.add_gridspec(2, 2, left=0.07, right=0.96, top=0.82, bottom=0.08,
                           hspace=0.38, wspace=0.28)
 
-    ax1 = fig.add_subplot(gs[0, :])
-    pivot = (
-        prod.pivot_table(index="txn_month", columns="product", values="revenue", aggfunc="sum")
-        .fillna(0).tail(24)
-    )
-    pivot.plot.area(
-        ax=ax1, stacked=True, alpha=0.85,
-        color=[PBI_TEAL, PBI_NAVY, PBI_ORANGE, PBI_PURPLE, PBI_RED],
-    )
-    ax1.set_title("Product Revenue Trend (trailing 24 months)", fontsize=11, fontweight="bold", loc="left")
-    ax1.set_ylabel("Revenue ($)")
-    ax1.set_xlabel("")
-    ax1.legend(loc="upper left", fontsize=7, frameon=False, ncol=3)
-    ax1.tick_params(axis="x", rotation=30)
-    ax1.grid(axis="y", alpha=0.25)
-    ax1.yaxis.set_major_formatter(mtick.FuncFormatter(lambda x, _: f"${x/1000:.0f}K"))
+    ax1 = fig.add_subplot(gs[0, 0])
+    status_order = ["within_sla", "beyond_sla", "pending_within_sla", "pending_beyond_sla"]
+    labels = {
+        "within_sla": "Resolved · Within SLA",
+        "beyond_sla": "Resolved · Beyond SLA",
+        "pending_within_sla": "Pending · Within SLA",
+        "pending_beyond_sla": "Pending · Beyond SLA",
+    }
+    counts = svc["sla_status"].value_counts().reindex(status_order).fillna(0)
+    ax1.pie(counts, labels=[labels.get(i, i) for i in counts.index], autopct="%1.0f%%",
+            colors=[PBI_TEAL, PBI_RED, PBI_NAVY, PBI_ORANGE],
+            textprops={"fontsize": 8}, startangle=90,
+            wedgeprops={"edgecolor": "white", "linewidth": 1.5})
+    ax1.set_title("SLA Status Mix", fontsize=11, fontweight="bold")
 
-    ax2 = fig.add_subplot(gs[1, 0])
-    curve = rev.groupby("months_since_signup")["revenue_per_customer"].mean().reset_index()
-    curve = curve[curve["months_since_signup"] <= 18]
-    ax2.plot(curve["months_since_signup"], curve["revenue_per_customer"], color=PBI_TEAL,
-             linewidth=2.5, marker="o", markersize=4)
-    ax2.fill_between(curve["months_since_signup"], curve["revenue_per_customer"],
-                     alpha=0.2, color=PBI_TEAL)
-    ax2.set_title("Avg Revenue / Customer by Tenure", fontsize=11, fontweight="bold", loc="left")
-    ax2.set_xlabel("Months Since Signup")
-    ax2.set_ylabel("Revenue per Customer ($)")
-    ax2.grid(alpha=0.25)
+    ax2 = fig.add_subplot(gs[0, 1])
+    resolved = svc[svc["resolved_hours"].notna()].copy()
+    by_pri = resolved.groupby("priority")["resolved_hours"].mean().reindex(
+        ["critical", "high", "medium", "low"]
+    ).dropna()
+    ax2.bar([p.title() for p in by_pri.index], by_pri.values,
+            color=[PBI_RED, PBI_ORANGE, PBI_NAVY, PBI_TEAL][: len(by_pri)])
+    ax2.set_title("Avg Resolve Hours by Priority", fontsize=11, fontweight="bold", loc="left")
+    ax2.set_ylabel("Hours")
+    ax2.grid(axis="y", alpha=0.25)
 
-    ax3 = fig.add_subplot(gs[1, 1])
-    top = rev.groupby("cohort_month")["revenue"].sum().nlargest(8).index
-    heat = rev[rev["cohort_month"].isin(top)].pivot_table(
-        index="cohort_month", columns="months_since_signup", values="revenue", aggfunc="sum"
-    ).iloc[:, :12]
-    sns.heatmap(heat / 1000, ax=ax3, cmap="YlGnBu", annot=False, cbar_kws={"label": "Revenue ($K)"})
-    ax3.set_title("Top Cohorts — Revenue by Tenure ($K)", fontsize=11, fontweight="bold", loc="left")
-    ax3.set_xlabel("Months Since Signup")
-    ax3.set_ylabel("Cohort")
+    ax3 = fig.add_subplot(gs[1, 0])
+    if "channel" in svc.columns:
+        breach = svc.groupby("channel").agg(total=("event_id", "count"), breached=("sla_breach", "sum"))
+        breach["breach_pct"] = breach["breached"] / breach["total"] * 100
+        breach = breach.sort_values("breach_pct")
+        ax3.barh(breach.index, breach["breach_pct"], color=PBI_RED)
+    ax3.set_title("SLA Breach Rate by Channel (%)", fontsize=11, fontweight="bold", loc="left")
+    ax3.set_xlabel("Breach %")
+    ax3.grid(axis="x", alpha=0.25)
 
-    fig.savefig(out / "revenue_segments_03_product.png")
+    ax4 = fig.add_subplot(gs[1, 1])
+    if "segment" in svc.columns:
+        by_seg = svc.groupby("segment").agg(
+            total=("event_id", "count"),
+            within=("sla_status", lambda s: (s == "within_sla").sum()),
+        )
+        by_seg["within_pct"] = by_seg["within"] / by_seg["total"] * 100
+        by_seg = by_seg.sort_values("within_pct")
+        ax4.barh(by_seg.index, by_seg["within_pct"], color=PBI_TEAL)
+    ax4.set_title("Within-SLA Rate by Segment (%)", fontsize=11, fontweight="bold", loc="left")
+    ax4.set_xlabel("Within SLA %")
+    ax4.grid(axis="x", alpha=0.25)
+
+    fig.savefig(out / "support_02_sla.png")
     plt.close(fig)
-    print("  wrote revenue_segments_03_product.png")
+    print("  wrote support_02_sla.png")
+
+
+def support_03_pending(marts: Path, out: Path) -> None:
+    svc = _load_support(marts)
+    open_tix = svc[svc["is_open"] == 1].copy() if "is_open" in svc.columns else svc.iloc[0:0].copy()
+
+    fig = plt.figure(figsize=(14.5, 9.2), facecolor=PBI_LIGHT)
+    _chrome(fig, "Support & SLA Performance", SUPPORT_TABS, 2,
+            "Pending Queue & Ticket Aging",
+            "Open tickets  ·  Age buckets  ·  Priority backlog",
+            dept="Customer Insights · Support")
+    gs = fig.add_gridspec(2, 2, left=0.07, right=0.96, top=0.82, bottom=0.08,
+                          hspace=0.38, wspace=0.28)
+
+    ax1 = fig.add_subplot(gs[0, 0])
+    if len(open_tix):
+        bins = [0, 24, 72, 168, 336, 10_000]
+        labels = ["<1d", "1–3d", "3–7d", "7–14d", "14d+"]
+        open_tix = open_tix.copy()
+        open_tix["age_bucket"] = pd.cut(open_tix["age_hours"], bins=bins, labels=labels, right=False)
+        age_counts = open_tix["age_bucket"].value_counts().reindex(labels).fillna(0)
+        ax1.bar(age_counts.index.astype(str), age_counts.values, color=PBI_ORANGE)
+    ax1.set_title("Open Ticket Aging", fontsize=11, fontweight="bold", loc="left")
+    ax1.set_ylabel("Tickets")
+    ax1.grid(axis="y", alpha=0.25)
+
+    ax2 = fig.add_subplot(gs[0, 1])
+    if len(open_tix):
+        by_pri = open_tix["priority"].value_counts().reindex(
+            ["critical", "high", "medium", "low"]
+        ).fillna(0)
+        ax2.bar([p.title() for p in by_pri.index], by_pri.values,
+                color=[PBI_RED, PBI_ORANGE, PBI_NAVY, PBI_TEAL])
+    ax2.set_title("Open Backlog by Priority", fontsize=11, fontweight="bold", loc="left")
+    ax2.grid(axis="y", alpha=0.25)
+
+    ax3 = fig.add_subplot(gs[1, 0])
+    if len(open_tix):
+        reason_col = "reason" if "reason" in open_tix.columns else "category"
+        by_reason = open_tix[reason_col].value_counts().sort_values(ascending=True)
+        ax3.barh(by_reason.index, by_reason.values, color=PBI_PURPLE)
+    ax3.set_title("Open Tickets by Reason", fontsize=11, fontweight="bold", loc="left")
+    ax3.grid(axis="x", alpha=0.25)
+
+    ax4 = fig.add_subplot(gs[1, 1])
+    ax4.axis("off")
+    oldest = open_tix.nlargest(8, "age_hours") if len(open_tix) else open_tix
+    ax4.text(0.0, 1.0, "Oldest Open Tickets", fontsize=12, fontweight="bold",
+             color=PBI_DARK, transform=ax4.transAxes, va="top")
+    header = f"{'Ticket':<10} {'Pri':<8} {'Age(h)':>7} {'Reason'}"
+    ax4.text(0.0, 0.88, header, fontsize=9, family="monospace", color=PBI_GRAY,
+             transform=ax4.transAxes, va="top")
+    reason_col = "reason" if "reason" in oldest.columns else "category"
+    lines = [
+        f"{r['event_id']:<10} {str(r['priority'])[:7]:<8} {r['age_hours']:>7.0f} {str(r[reason_col])[:22]}"
+        for _, r in oldest.iterrows()
+    ]
+    ax4.text(0.0, 0.78, "\n".join(lines) if lines else "No open tickets",
+             fontsize=9, family="monospace", color=PBI_DARK,
+             transform=ax4.transAxes, va="top",
+             bbox=dict(boxstyle="round,pad=0.5", facecolor=PBI_WHITE,
+                       edgecolor=PBI_ORANGE, linewidth=1.2))
+
+    fig.savefig(out / "support_03_pending.png")
+    plt.close(fig)
+    print("  wrote support_03_pending.png")
 
 
 def main() -> None:
@@ -480,13 +499,23 @@ def main() -> None:
                         help="Also copy screenshots to reports/powerbi/screenshots/")
     args = parser.parse_args()
     args.out.mkdir(parents=True, exist_ok=True)
+
+    for pattern in ["customer_health_*.png", "revenue_segments_*.png"]:
+        for obsolete in args.out.glob(pattern):
+            obsolete.unlink()
+            print(f"  removed {obsolete.name}")
+        mirror = Path("reports/powerbi/screenshots")
+        if mirror.exists():
+            for obsolete in mirror.glob(pattern):
+                obsolete.unlink()
+
     print("Generating Power BI–styled report pages (2 reports)…")
-    health_01_overview(args.marts, args.out)
-    health_02_retention(args.marts, args.out)
-    health_03_churn_risk(args.marts, args.artifacts, args.out)
-    revenue_01_mrr(args.marts, args.out)
-    revenue_02_segments(args.marts, args.out)
-    revenue_03_product_risk(args.marts, args.out)
+    retention_01_overview(args.marts, args.out)
+    retention_02_cohorts(args.marts, args.out)
+    retention_03_growth(args.marts, args.out)
+    support_01_overview(args.marts, args.out)
+    support_02_sla(args.marts, args.out)
+    support_03_pending(args.marts, args.out)
 
     if args.also_reports:
         mirror = Path("reports/powerbi/screenshots")

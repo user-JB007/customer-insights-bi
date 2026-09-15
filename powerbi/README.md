@@ -1,22 +1,21 @@
 # Power BI Report Pack — Customer Insights BI
 
 **Primary BI tool for this repo: Power BI.**  
-Honest portfolio design: **semantic model + DAX + page briefs + GitHub screenshots**.  
-No opaque `.pbix` binaries — visitors view dashboards on GitHub and recreate them in Power BI Desktop from mart CSVs.
+Semantic model, DAX, page briefs, and GitHub screenshots. Recreate in Power BI Desktop from mart CSVs under `data/marts/`.
 
-## Exactly two reports (same SaaS domain, different questions)
+## Exactly two reports (different business subjects)
 
 | Report | Purpose | Screenshots |
 |--------|---------|-------------|
-| **Customer Health** | Retention, cohorts, churn risk overview | `customer_health_01_overview.png`, `customer_health_02_retention.png`, `customer_health_03_churn_risk.png` |
-| **Revenue & Segments** | MRR/revenue, segment performance, product & cohort yield | `revenue_segments_01_mrr.png`, `revenue_segments_02_segments.png`, `revenue_segments_03_product.png` |
+| **Customer Retention & Growth** | Retention, cohorts, active customers, growth | `retention_01_overview.png`, `retention_02_cohorts.png`, `retention_03_growth.png` |
+| **Support & SLA Performance** | Tickets, CSAT, within/beyond SLA, pending & aging | `support_01_overview.png`, `support_02_sla.png`, `support_03_pending.png` |
 
 ## View on GitHub (no Desktop required)
 
 See the root README **Power BI Reports** section, or browse:
 
 - `powerbi/screenshots/`
-- `reports/powerbi/screenshots/` (mirror for README embeds)
+- `reports/powerbi/screenshots/` (mirror)
 
 Regenerate:
 
@@ -38,6 +37,7 @@ python run_pipeline.py
 | `revenue_cohorts.csv` | `fact_revenue_cohorts` |
 | `segment_performance.csv` | `dim_segment_perf` |
 | `product_revenue.csv` | `fact_product_revenue` |
+| `support_sla.csv` | `fact_support_sla` |
 
 2. Relationships & grain: [`model/semantic_model.md`](model/semantic_model.md)
 3. Measures: [`model/measures.dax`](model/measures.dax)
@@ -45,4 +45,4 @@ python run_pipeline.py
 
 ## Design intent
 
-Marts are the warehouse contract (Snowflake SQL under `sql/marts/` + Python parity). Screenshots render on github.com; DAX proves Desktop/Fabric readiness without shipping a non-portable `.pbix`.
+Marts are the warehouse contract (Snowflake SQL under `sql/marts/` + Python parity). Screenshots render on github.com; DAX supports Desktop/Fabric recreation without shipping a non-portable `.pbix`.

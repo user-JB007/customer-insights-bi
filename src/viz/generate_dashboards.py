@@ -1,4 +1,4 @@
-"""Generate polished executive-style dashboard PNG screenshots for the portfolio.
+"""Generate polished executive-style dashboard PNG screenshots for the project.
 
 Produces 6 labeled report images under reports/screenshots/.
 """
@@ -51,8 +51,8 @@ def _banner(fig: plt.Figure, title: str, subtitle: str) -> None:
 
 
 def _footer(fig: plt.Figure, label: str) -> None:
-    fig.text(0.02, 0.015, f"Customer Insights BI  ·  {label}  ·  Portfolio demo (synthetic data)", fontsize=8, color=SLATE)
-    fig.text(0.98, 0.015, "CONFIDENTIAL — SAMPLE", fontsize=8, color=CORAL, ha="right", fontweight="bold")
+    fig.text(0.02, 0.015, f"Customer Insights BI  ·  {label}", fontsize=8, color=SLATE)
+    fig.text(0.98, 0.015, "INTERNAL", fontsize=8, color=CORAL, ha="right", fontweight="bold")
 
 
 def dash_01_executive_overview(marts: Path, out: Path) -> None:

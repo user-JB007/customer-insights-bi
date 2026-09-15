@@ -22,10 +22,12 @@ def main() -> None:
     run([py, "src/data/build_marts.py", "--raw-dir", "data/raw", "--out-dir", "data/marts"])
     run([py, "src/models/train_churn.py", "--features", "data/processed/churn_features.csv", "--out-dir", "artifacts/model"])
     run([py, "src/viz/generate_dashboards.py", "--marts", "data/marts", "--artifacts", "artifacts/model", "--out", "reports/screenshots"])
+    run([py, "src/viz/generate_powerbi_pages.py", "--marts", "data/marts", "--artifacts", "artifacts/model", "--out", "reports/powerbi/screenshots"])
     print("\n✓ Pipeline complete.")
     print("  Marts:       data/marts/")
     print("  Model:       artifacts/model/")
     print("  Screenshots: reports/screenshots/")
+    print("  Power BI:    reports/powerbi/screenshots/")
 
 
 if __name__ == "__main__":

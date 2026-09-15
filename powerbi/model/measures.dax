@@ -1,0 +1,116 @@
+-- Customer Insights BI — core DAX measures for Power BI Desktop
+-- Load data/marts CSVs (and optional holdout_predictions) first.
+
+-- ===== Book & revenue (customer 360) =====
+Active Customers =
+CALCULATE (
+    DISTINCTCOUNT ( fact_customer_360[customer_id] ),
+    fact_customer_360[is_active] = 1
+)
+
+Total Customers =
+DISTINCTCOUNT ( fact_customer_360[customer_id] )
+
+Total MRR =
+SUM ( fact_customer_360[mrr] )
+
+Total ARR =
+[Total MRR] * 12
+
+Lifetime Revenue =
+SUM ( fact_customer_360[lifetime_revenue] )
+
+Avg Health Score =
+AVERAGE ( fact_customer_360[customer_health_score] )
+
+Avg NPS =
+AVERAGE ( fact_customer_360[nps_score] )
+
+-- ===== Churn / retention (customer grain) =====
+Churned Customers =
+CALCULATE (
+    DISTINCTCOUNT ( fact_customer_360[customer_id] ),
+    fact_customer_360[is_churned] = 1
+)
+
+Logo Churn Rate =
+DIVIDE ( [Churned Customers], [Total Customers] )
+
+At Risk Customers =
+CALCULATE (
+    DISTINCTCOUNT ( fact_customer_360[customer_id] ),
+    fact_customer_360[is_churned] = 0,
+    fact_customer_360[mrr] > 0,
+    FILTER (
+        fact_customer_360,
+        fact_customer_360[customer_health_score] < 45
+            || fact_customer_360[payment_failures_90d] >= 2
+            || fact_customer_360[monthly_active_days] < 5
+    )
+)
+
+At Risk MRR =
+CALCULATE (
+    SUM ( fact_customer_360[mrr] ),
+    fact_customer_360[is_churned] = 0,
+    fact_customer_360[mrr] > 0,
+    FILTER (
+        fact_customer_360,
+        fact_customer_360[customer_health_score] < 45
+            || fact_customer_360[payment_failures_90d] >= 2
+            || fact_customer_360[monthly_active_days] < 5
+    )
+)
+
+-- ===== MRR movement (monthly fact) =====
+MRR =
+SUM ( fact_mrr_movement[mrr] )
+
+ARR Movement =
+SUM ( fact_mrr_movement[arr] )
+
+New MRR =
+SUM ( fact_mrr_movement[new_mrr] )
+
+Churned MRR =
+SUM ( fact_mrr_movement[churned_mrr] )
+
+Net New MRR =
+SUM ( fact_mrr_movement[net_new_mrr] )
+
+MRR MoM % =
+VAR Curr = [MRR]
+VAR Prev =
+    CALCULATE ( [MRR], DATEADD ( dim_date[month], -1, MONTH ) )
+RETURN
+    DIVIDE ( Curr - Prev, Prev )
+
+Logo Churn Rate (Monthly) =
+AVERAGE ( fact_mrr_movement[logo_churn_rate] )
+
+-- ===== Cohorts =====
+Retention Rate =
+AVERAGE ( fact_retention_monthly[retention_rate] )
+
+Revenue per Customer =
+AVERAGE ( fact_revenue_cohorts[revenue_per_customer] )
+
+Cohort Revenue =
+SUM ( fact_revenue_cohorts[revenue] )
+
+-- ===== Product =====
+Product Revenue =
+SUM ( fact_product_revenue[revenue] )
+
+Product Customers =
+SUM ( fact_product_revenue[customers] )
+
+-- ===== Churn model scores (optional fact_churn_scores) =====
+Avg Churn Probability =
+AVERAGE ( fact_churn_scores[churn_probability] )
+
+High Risk Score Count =
+CALCULATE (
+    COUNTA ( fact_churn_scores[customer_id] ),
+    fact_churn_scores[churn_probability] >= 0.5
+)

@@ -6,6 +6,31 @@
 
 ---
 
+
+---
+
+## Power BI Reports
+
+View executive dashboards on GitHub **without Power BI Desktop**. Pipeline marts + churn ML + BI screenshots are all in-repo.
+
+| Page | Preview |
+|------|---------|
+| Executive Overview | ![Executive Overview](reports/powerbi/screenshots/01_executive_overview.png) |
+| Retention Cohorts | ![Retention Cohorts](reports/powerbi/screenshots/02_retention_heatmap.png) |
+| Revenue Cohorts | ![Revenue Cohorts](reports/powerbi/screenshots/03_revenue_cohorts.png) |
+| Segment Performance | ![Segment Performance](reports/powerbi/screenshots/04_segment_performance.png) |
+| Churn Model | ![Churn Model](reports/powerbi/screenshots/05_churn_model_performance.png) |
+| Product & Risk | ![Product & Risk](reports/powerbi/screenshots/06_product_and_risk.png) |
+
+Classic portfolio screenshots (same story, alternate chrome) remain under [`reports/screenshots/`](reports/screenshots/).  
+**Desktop recreation** (star schema, DAX, page briefs): [`powerbi/README.md`](powerbi/README.md)
+
+```bash
+python src/viz/generate_powerbi_pages.py   # Power BI–styled pages → reports/powerbi/screenshots/
+python src/viz/generate_dashboards.py      # classic pages → reports/screenshots/
+```
+
+
 ## Problem
 
 SaaS operators need a single customer view: who is growing, who is churning, and which cohorts pay back. This project demonstrates an end-to-end path from raw events → curated marts → churn scoring → executive visuals that a hiring manager or client can clone and run locally (no cloud credentials).
@@ -94,12 +119,14 @@ customer-insights-bi/
 │   └── bi_tool_mapping.md
 ├── notebooks/
 │   └── churn_model_walkthrough.ipynb
-├── reports/screenshots/      # executive PNGs
+├── powerbi/                  # semantic model, DAX, page briefs
+├── reports/screenshots/      # classic executive PNGs
+├── reports/powerbi/screenshots/  # Power BI–chrome PNGs (README embeds)
 ├── sql/marts/                # Snowflake-flavored DDL + views
 └── src/
     ├── data/                 # generate + build marts
     ├── models/               # train churn classifier
-    └── viz/                  # dashboard PNG generator
+    └── viz/                  # dashboard + Power BI page generators
 ```
 
 ## Model notes

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""One-command local pipeline: data → marts → churn model → dashboard screenshots."""
+"""One-command local pipeline: data → marts → churn model → Power BI screenshots."""
 from __future__ import annotations
 
 import subprocess
@@ -21,13 +21,12 @@ def main() -> None:
     run([py, "src/data/generate_synthetic.py", "--n-customers", "5000", "--out-dir", "data/raw"])
     run([py, "src/data/build_marts.py", "--raw-dir", "data/raw", "--out-dir", "data/marts"])
     run([py, "src/models/train_churn.py", "--features", "data/processed/churn_features.csv", "--out-dir", "artifacts/model"])
-    run([py, "src/viz/generate_dashboards.py", "--marts", "data/marts", "--artifacts", "artifacts/model", "--out", "reports/screenshots"])
-    run([py, "src/viz/generate_powerbi_pages.py", "--marts", "data/marts", "--artifacts", "artifacts/model", "--out", "reports/powerbi/screenshots"])
+    run([py, "src/viz/generate_powerbi_pages.py", "--marts", "data/marts", "--artifacts", "artifacts/model", "--out", "powerbi/screenshots"])
     print("\n✓ Pipeline complete.")
-    print("  Marts:       data/marts/")
-    print("  Model:       artifacts/model/")
-    print("  Screenshots: reports/screenshots/")
-    print("  Power BI:    reports/powerbi/screenshots/")
+    print("  Marts:        data/marts/")
+    print("  Model:        artifacts/model/")
+    print("  Power BI:     powerbi/screenshots/")
+    print("  (mirrored)    reports/powerbi/screenshots/")
 
 
 if __name__ == "__main__":

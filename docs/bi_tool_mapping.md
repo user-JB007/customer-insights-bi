@@ -1,4 +1,6 @@
-# How Marts Feed Power BI / Tableau / Fabric / Databricks SQL
+# How Marts Feed BI Tools (Power BI primary)
+
+This repo's **primary BI demo is Power BI** (see `powerbi/`). Other tools below are optional mapping notes.
 
 This project ships **curated analytics marts** (CSV + Parquet locally; Snowflake SQL views for warehouse deployment). No live cloud connection is required for the demo — point your BI tool at the files or deploy the SQL to Snowflake / Databricks SQL.
 

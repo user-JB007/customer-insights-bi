@@ -1,44 +1,27 @@
-# Semantic Model — Customer Insights (Star Schema)
+# Semantic model — Customer Insights BI (Power BI)
 
-## Grain
+Star-ish layout over curated marts. Two reports share the same model.
 
-| Table | Grain |
-|-------|-------|
-| `fact_customer_360` | One row per **customer** (as-of snapshot) |
-| `fact_mrr_movement` | One row per **calendar month** |
-| `fact_retention_monthly` | One row per **signup cohort × months_since_signup** |
-| `fact_revenue_cohorts` | One row per **signup cohort × months_since_signup** |
-| `fact_product_revenue` | One row per **txn_month × product** |
-| `dim_segment_perf` | One row per **segment × region × plan** (pre-agg helper) |
-| `fact_churn_scores` | One row per **holdout customer** (ML scores) |
+## Tables
 
-## Dimensions (logical)
+| Table | Grain | Key columns |
+|-------|-------|-------------|
+| `fact_customer_360` | 1 row / customer | `customer_id`, segment, region, plan, mrr, health, `is_churned` |
+| `fact_mrr_movement` | 1 row / month | `month`, mrr, arr, new/churned mrr & logos |
+| `fact_retention_monthly` | cohort × tenure month | `cohort_month`, `months_since_signup`, `retention_rate` |
+| `fact_revenue_cohorts` | cohort × tenure month | revenue, `revenue_per_customer` |
+| `fact_product_revenue` | month × product | `txn_month`, `product`, `revenue` |
+| `dim_segment_perf` | segment × region × plan | aggregated KPIs (optional) |
 
-| Dimension | Key / attributes |
-|-----------|------------------|
-| `dim_customer` | `customer_id`, segment, region, plan, acquisition_channel, seats |
-| `dim_date` / month | `month` (YYYY-MM), year, quarter |
-| `dim_cohort` | `cohort_month` |
-| `dim_product` | `product` |
-| `dim_plan` | Free, Starter, Pro, Business, Enterprise |
-| `dim_segment` | Enterprise, Mid-Market, SMB, Startup |
-| `dim_region` | region labels |
+## Relationships (conceptual)
 
-`fact_customer_360` is a wide customer fact that already carries dimensional attributes — acceptable for Desktop demos. In Fabric/Snowflake, normalize to dims and keep measures on the fact.
+- `fact_customer_360[segment|region|plan]` → filters on `dim_segment_perf`
+- Date: use `fact_mrr_movement[month]` as calendar bridge for time intelligence where needed
+- Cohorts are self-contained (no customer-level join required for heatmaps)
 
-## Relationships
+## Report binding
 
-```
-dim_date[month]          1—*  fact_mrr_movement[month]
-dim_date[month]          1—*  fact_product_revenue[txn_month]
-dim_cohort[cohort_month] 1—*  fact_retention_monthly[cohort_month]
-dim_cohort[cohort_month] 1—*  fact_revenue_cohorts[cohort_month]
-dim_customer[customer_id] 1—* fact_churn_scores[customer_id]   (optional)
-dim_customer[customer_id] 1—1 fact_customer_360[customer_id]
-```
-
-Filter direction: single (dims → facts). Cohort pages typically do **not** cross-filter the MRR movement page.
-
-## Notable columns — fact_customer_360
-
-`customer_id`, `signup_date`, `segment`, `region`, `plan`, `acquisition_channel`, `seats`, `mrr`, `tenure_days`, `monthly_active_days`, `support_tickets_90d`, `nps_score`, `feature_adoption_score`, `payment_failures_90d`, `is_churned`, `lifetime_revenue`, `customer_health_score`, `is_active`, …
+| Report | Primary tables |
+|--------|----------------|
+| Customer Health | customer_360, mrr_movement, retention_monthly |
+| Revenue & Segments | mrr_movement, customer_360, product_revenue, revenue_cohorts |

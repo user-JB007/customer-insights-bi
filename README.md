@@ -1,6 +1,6 @@
 # Customer Insights BI
 
-**Hire-ready data engineering + analytics portfolio project** — synthetic SaaS customer data, Snowflake-flavored SQL marts, a real churn ML model, and executive dashboard screenshots ready for Power BI / Tableau / Fabric / Databricks SQL.
+**Hire-ready data engineering + analytics portfolio project** — synthetic SaaS customer data, Snowflake-flavored SQL marts, a real churn ML model, and **Power BI** executive reports (screenshots + semantic model / DAX).
 
 📁 **Repo:** https://github.com/user-JB007/customer-insights-bi
 
@@ -8,23 +8,30 @@
 
 ## Power BI Reports
 
-View executive dashboards on GitHub **without Power BI Desktop**. Pipeline marts + churn ML + BI screenshots are all in-repo.
+**Primary BI tool: Power BI.** View two multi-page reports on GitHub **without Power BI Desktop**. Pipeline marts + churn ML + screenshots are all in-repo.
+
+### Report A — Customer Health
+Retention, cohorts, and churn risk overview.
 
 | Page | Preview |
 |------|---------|
-| Executive Overview | ![Executive Overview](reports/powerbi/screenshots/01_executive_overview.png) |
-| Retention Cohorts | ![Retention Cohorts](reports/powerbi/screenshots/02_retention_heatmap.png) |
-| Revenue Cohorts | ![Revenue Cohorts](reports/powerbi/screenshots/03_revenue_cohorts.png) |
-| Segment Performance | ![Segment Performance](reports/powerbi/screenshots/04_segment_performance.png) |
-| Churn Model | ![Churn Model](reports/powerbi/screenshots/05_churn_model_performance.png) |
-| Product & Risk | ![Product & Risk](reports/powerbi/screenshots/06_product_and_risk.png) |
+| Overview | ![Health Overview](powerbi/screenshots/customer_health_01_overview.png) |
+| Retention | ![Retention](powerbi/screenshots/customer_health_02_retention.png) |
+| Churn Risk | ![Churn Risk](powerbi/screenshots/customer_health_03_churn_risk.png) |
 
-Classic portfolio screenshots (same story, alternate chrome) remain under [`reports/screenshots/`](reports/screenshots/).  
+### Report B — Revenue & Segments
+MRR/revenue, segment performance, product & cohort yield.
+
+| Page | Preview |
+|------|---------|
+| MRR & Movement | ![MRR](powerbi/screenshots/revenue_segments_01_mrr.png) |
+| Segments | ![Segments](powerbi/screenshots/revenue_segments_02_segments.png) |
+| Product & Cohorts | ![Product](powerbi/screenshots/revenue_segments_03_product.png) |
+
 **Desktop recreation** (star schema, DAX, page briefs): [`powerbi/README.md`](powerbi/README.md)
 
 ```bash
-python src/viz/generate_powerbi_pages.py   # Power BI–styled pages → reports/powerbi/screenshots/
-python src/viz/generate_dashboards.py      # classic pages → reports/screenshots/
+python src/viz/generate_powerbi_pages.py   # → powerbi/screenshots/ (+ mirror under reports/powerbi/)
 ```
 
 
@@ -41,8 +48,8 @@ Raw CSV (customers, transactions, support)
  Curated marts  ←── sql/marts/*.sql (Snowflake)  +  Python parity builder
         │
         ├──► Churn model (Gradient Boosting) → artifacts/model/
-        └──► Executive PNG dashboards → reports/screenshots/
-                 └── documented mapping to Power BI / Tableau / Fabric / Databricks SQL
+        └──► Power BI report screenshots → powerbi/screenshots/
+                 └── semantic model + DAX for Desktop / Fabric recreation
 ```
 
 See [docs/architecture.md](docs/architecture.md) and [docs/bi_tool_mapping.md](docs/bi_tool_mapping.md).
@@ -54,8 +61,8 @@ See [docs/architecture.md](docs/architecture.md) and [docs/bi_tool_mapping.md](d
 | **Synthetic data** | 5,000 customers, multi-year transactions & support events with realistic churn drivers |
 | **SQL marts** | Customer 360, retention, revenue cohorts, MRR movement, segment & product marts |
 | **Churn ML** | Trained Gradient Boosting model, ROC-AUC / precision / recall, feature importance, holdout preds |
-| **Dashboards** | 6 labeled executive-style PNG screenshots + generation script |
-| **BI docs** | How to wire marts into Power BI, Tableau, Fabric, Databricks SQL — no live cloud required |
+| **Power BI reports** | 2 multi-page reports (Customer Health · Revenue & Segments) with polished PNGs |
+| **BI docs** | Semantic model + DAX + page briefs — recreate in Power BI Desktop from mart CSVs |
 | **One command** | `python run_pipeline.py` regenerates everything |
 
 ## Quick start
@@ -77,7 +84,7 @@ Outputs:
 - `data/marts/` — curated CSV + Parquet marts  
 - `data/processed/churn_features.*` — ML feature table  
 - `artifacts/model/` — `churn_model.joblib`, `metrics.json`, `EVALUATION.md`  
-- `reports/screenshots/` — six portfolio PNGs  
+- `powerbi/screenshots/` — Power BI report PNGs (2 reports × 3 pages)  
 
 ### Run steps individually
 
@@ -85,19 +92,8 @@ Outputs:
 python src/data/generate_synthetic.py --n-customers 5000
 python src/data/build_marts.py
 python src/models/train_churn.py
-python src/viz/generate_dashboards.py
+python src/viz/generate_powerbi_pages.py
 ```
-
-## Dashboard screenshots
-
-| # | File | Description |
-|---|------|-------------|
-| 01 | `reports/screenshots/01_executive_overview.png` | ARR / customers / churn KPIs + MRR trend |
-| 02 | `reports/screenshots/02_retention_heatmap.png` | Logo retention cohort heatmap |
-| 03 | `reports/screenshots/03_revenue_cohorts.png` | Revenue per customer by tenure |
-| 04 | `reports/screenshots/04_segment_performance.png` | Region, channel, plan performance |
-| 05 | `reports/screenshots/05_churn_model_performance.png` | ROC, confusion matrix, importances |
-| 06 | `reports/screenshots/06_product_and_risk.png` | Product mix + at-risk outreach list |
 
 ## Project layout
 
@@ -116,14 +112,13 @@ customer-insights-bi/
 │   └── bi_tool_mapping.md
 ├── notebooks/
 │   └── churn_model_walkthrough.ipynb
-├── powerbi/                  # semantic model, DAX, page briefs
-├── reports/screenshots/      # classic executive PNGs
-├── reports/powerbi/screenshots/  # Power BI–chrome PNGs (README embeds)
+├── powerbi/                  # 2 reports: screenshots, model, DAX, page briefs
+├── reports/powerbi/screenshots/  # mirror of Power BI PNGs
 ├── sql/marts/                # Snowflake-flavored DDL + views
 └── src/
     ├── data/                 # generate + build marts
     ├── models/               # train churn classifier
-    └── viz/                  # dashboard + Power BI page generators
+    └── viz/                  # Power BI page generator
 ```
 
 ## Model notes
@@ -137,7 +132,7 @@ This is a **real trained model** on synthetic data designed with identifiable si
 
 ## SQL / warehouse
 
-Deploy `sql/marts/00_setup.sql` through `06_product_revenue.sql` to Snowflake (or adapt per [docs/bi_tool_mapping.md](docs/bi_tool_mapping.md)). Local Parquet/CSV marts match the same grains for offline BI.
+Deploy `sql/marts/00_setup.sql` through `06_product_revenue.sql` to Snowflake. Local Parquet/CSV marts match the same grains for offline Power BI. Optional broader tool notes: [docs/bi_tool_mapping.md](docs/bi_tool_mapping.md).
 
 ## License
 

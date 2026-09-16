@@ -1,6 +1,6 @@
 # Customer Insights BI
 
-Customer analytics stack for SaaS operations: source extracts → curated marts → churn model → **Power BI** executive reports (screenshots + semantic model / DAX).
+Customer analytics stack for SaaS operations: source extracts → curated marts → churn model → **Power BI** reports (PBIP project + semantic model / DAX; screenshots secondary).
 
 **Repo:** https://github.com/user-JB007/customer-insights-bi
 
@@ -8,9 +8,24 @@ Customer analytics stack for SaaS operations: source extracts → curated marts 
 
 ## Power BI Reports
 
-**Primary BI tool: Power BI.** Two multi-page reports are visible on GitHub without Power BI Desktop. Pipeline marts, churn ML, and screenshots are all in-repo.
+**Primary BI deliverable: Power BI Project (PBIP)** under [`powerbi/`](powerbi/) — opens in Power BI Desktop. Screenshots below are secondary GitHub previews (not the workbook).
 
-### Report 1 — Customer Retention & Growth
+| Report | Open this |
+|--------|-----------|
+| **Customer Retention & Growth** | [`powerbi/Customer_Retention_Growth.pbip`](powerbi/Customer_Retention_Growth.pbip) |
+| **Support & SLA Performance** | [`powerbi/Support_SLA_Performance.pbip`](powerbi/Support_SLA_Performance.pbip) |
+
+Shared semantic model: [`powerbi/CustomerInsights.SemanticModel/`](powerbi/CustomerInsights.SemanticModel/) (TMSL `model.bim` + measures). Mart CSVs for refresh: `powerbi/data/` (and `data/marts/`).
+
+**Open in Power BI Desktop:** see exact steps in [`powerbi/README.md`](powerbi/README.md). After refresh, File → Save As → `.pbix` if you need a single-file workbook.
+
+**Rebuild project from marts:**
+
+```bash
+python scripts/build_powerbi_project.py
+```
+
+### Report 1 — Customer Retention & Growth (preview)
 Retention, cohorts, active customers, and growth.
 
 | Page | Preview |
@@ -19,20 +34,14 @@ Retention, cohorts, active customers, and growth.
 | Cohorts | ![Cohorts](powerbi/screenshots/retention_02_cohorts.png) |
 | Growth | ![Growth](powerbi/screenshots/retention_03_growth.png) |
 
-### Report 2 — Support & SLA Performance
-Support tickets and complaints: satisfaction, within SLA / breached / pending, resolution times and aging.
+### Report 2 — Support & SLA Performance (preview)
+Satisfaction, within SLA / breached / pending, resolution times and aging. Parameter measure: **Aging Threshold Hours**.
 
 | Page | Preview |
 |------|---------|
 | Overview | ![Support Overview](powerbi/screenshots/support_01_overview.png) |
 | SLA Performance | ![SLA](powerbi/screenshots/support_02_sla.png) |
 | Pending | ![Pending](powerbi/screenshots/support_03_pending.png) |
-
-**Desktop recreation** (star schema, DAX, page briefs): [`powerbi/README.md`](powerbi/README.md)
-
-```bash
-python src/viz/generate_powerbi_pages.py   # → powerbi/screenshots/ (+ mirror under reports/powerbi/)
-```
 
 ---
 

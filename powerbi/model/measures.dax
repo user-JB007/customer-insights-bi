@@ -1,27 +1,15 @@
--- Customer Insights BI — shared measures for Customer Health + Revenue & Segments
+-- Customer Insights BI — DAX measures (matches CustomerInsights.SemanticModel)
 
+-- fact_customer_360
 Active Customers =
 CALCULATE ( COUNTROWS ( fact_customer_360 ), fact_customer_360[is_active] = 1 )
 
 Churned Customers =
 CALCULATE ( COUNTROWS ( fact_customer_360 ), fact_customer_360[is_churned] = 1 )
 
-Logo Churn Rate =
-DIVIDE (
-    SUM ( fact_mrr_movement[churned_customers] ),
-    SUM ( fact_mrr_movement[active_customers] ) + SUM ( fact_mrr_movement[churned_customers] )
-)
+Customer Count = COUNTROWS ( fact_customer_360 )
 
-Total MRR = SUM ( fact_mrr_movement[mrr] )
-
-Total ARR = SUM ( fact_mrr_movement[arr] )
-
-Net New MRR = SUM ( fact_mrr_movement[net_new_mrr] )
-
-MRR MoM % =
-VAR Curr = TOTALYTD ( [Total MRR], fact_mrr_movement[month] ) -- prefer DATEADD pattern in Desktop
-VAR Prev = CALCULATE ( [Total MRR], DATEADD ( fact_mrr_movement[month], -1, MONTH ) )
-RETURN DIVIDE ( Curr - Prev, Prev )
+Active Rate = DIVIDE ( [Active Customers], [Customer Count] )
 
 Avg Health Score = AVERAGE ( fact_customer_360[customer_health_score] )
 
@@ -39,8 +27,70 @@ CALCULATE (
     )
 )
 
+-- fact_mrr_movement
+Total MRR = SUM ( fact_mrr_movement[mrr] )
+
+Total ARR = SUM ( fact_mrr_movement[arr] )
+
+Net New MRR = SUM ( fact_mrr_movement[net_new_mrr] )
+
+New Logos = SUM ( fact_mrr_movement[new_customers] )
+
+Churned Logos = SUM ( fact_mrr_movement[churned_customers] )
+
+Logo Churn Rate =
+DIVIDE (
+    SUM ( fact_mrr_movement[churned_customers] ),
+    SUM ( fact_mrr_movement[active_customers] ) + SUM ( fact_mrr_movement[churned_customers] )
+)
+
+MRR MoM % =
+VAR Curr = [Total MRR]
+VAR Prev = CALCULATE ( [Total MRR], DATEADD ( fact_mrr_movement[month], -1, MONTH ) )
+RETURN DIVIDE ( Curr - Prev, Prev )
+
+-- fact_retention_monthly / cohorts
 Avg Retention Rate = AVERAGE ( fact_retention_monthly[retention_rate] )
+
+Revenue Per Customer = AVERAGE ( fact_revenue_cohorts[revenue_per_customer] )
+
+Cohort Revenue = SUM ( fact_revenue_cohorts[revenue] )
 
 Product Revenue = SUM ( fact_product_revenue[revenue] )
 
-Revenue Per Customer = AVERAGE ( fact_revenue_cohorts[revenue_per_customer] )
+-- fact_support_sla
+Ticket Volume = COUNTROWS ( fact_support_sla )
+
+Avg CSAT = AVERAGE ( fact_support_sla[csat] )
+
+Within SLA % =
+DIVIDE (
+    CALCULATE ( COUNTROWS ( fact_support_sla ), fact_support_sla[sla_status] = "within_sla" ),
+    CALCULATE ( COUNTROWS ( fact_support_sla ), fact_support_sla[is_open] = 0 )
+)
+
+Pending Tickets =
+CALCULATE (
+    COUNTROWS ( fact_support_sla ),
+    fact_support_sla[status] IN { "pending", "escalated" }
+)
+
+Open Tickets =
+CALCULATE ( COUNTROWS ( fact_support_sla ), fact_support_sla[is_open] = 1 )
+
+Avg Resolve Hours = AVERAGE ( fact_support_sla[resolved_hours] )
+
+Breach Count =
+CALCULATE ( COUNTROWS ( fact_support_sla ), fact_support_sla[sla_breach] = TRUE () )
+
+Aging Threshold Hours =
+SELECTEDVALUE ( 'Aging Threshold'[Aging Threshold Hours], 72 )
+
+Beyond Aging Threshold =
+VAR Threshold = [Aging Threshold Hours]
+RETURN
+    CALCULATE (
+        COUNTROWS ( fact_support_sla ),
+        fact_support_sla[is_open] = 1,
+        fact_support_sla[age_hours] >= Threshold
+    )

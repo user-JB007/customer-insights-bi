@@ -1,0 +1,184 @@
+{
+  "config": "{\"version\": \"5.43\", \"themeCollection\": {\"baseTheme\": {\"name\": \"CY23SU08\", \"version\": \"5.43\", \"type\": 2}}, \"activeSectionIndex\": 0, \"defaultDrillFilterOtherVisuals\": true, \"linguisticSchemaSyncVersion\": 2, \"settings\": {\"useNewFilterPaneExperience\": true, \"allowChangeFilterTypes\": true}}",
+  "filters": "[]",
+  "sections": [
+    {
+      "name": "ReportSectionOverview",
+      "displayName": "Overview",
+      "filters": "[]",
+      "ordinal": 0,
+      "visualContainers": [
+        {
+          "x": 20,
+          "y": 20,
+          "z": 0,
+          "width": 200,
+          "height": 100,
+          "config": "{\"name\": \"ActiveCustomers1124\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 20, \"y\": 20, \"z\": 0, \"width\": 200, \"height\": 100, \"tabOrder\": 0}}], \"singleVisual\": {\"visualType\": \"card\", \"projections\": {\"Values\": [{\"queryRef\": \"fact_customer_360.Active Customers\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"f\", \"Entity\": \"fact_customer_360\", \"Type\": 0}], \"Select\": [{\"Measure\": {\"Expression\": {\"SourceRef\": {\"Source\": \"f\"}}, \"Property\": \"Active Customers\"}, \"Name\": \"fact_customer_360.Active Customers\", \"NativeReferenceName\": \"Active Customers\"}]}, \"vcObjects\": {\"title\": [{\"properties\": {\"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}, \"text\": {\"expr\": {\"Literal\": {\"Value\": \"'Active Customers'\"}}}}}]}}}",
+          "filters": "[]"
+        },
+        {
+          "x": 240,
+          "y": 20,
+          "z": 0,
+          "width": 200,
+          "height": 100,
+          "config": "{\"name\": \"LogoChurnRate8005\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 240, \"y\": 20, \"z\": 0, \"width\": 200, \"height\": 100, \"tabOrder\": 0}}], \"singleVisual\": {\"visualType\": \"card\", \"projections\": {\"Values\": [{\"queryRef\": \"fact_mrr_movement.Logo Churn Rate\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"f\", \"Entity\": \"fact_mrr_movement\", \"Type\": 0}], \"Select\": [{\"Measure\": {\"Expression\": {\"SourceRef\": {\"Source\": \"f\"}}, \"Property\": \"Logo Churn Rate\"}, \"Name\": \"fact_mrr_movement.Logo Churn Rate\", \"NativeReferenceName\": \"Logo Churn Rate\"}]}, \"vcObjects\": {\"title\": [{\"properties\": {\"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}, \"text\": {\"expr\": {\"Literal\": {\"Value\": \"'Logo Churn Rate'\"}}}}}]}}}",
+          "filters": "[]"
+        },
+        {
+          "x": 460,
+          "y": 20,
+          "z": 0,
+          "width": 200,
+          "height": 100,
+          "config": "{\"name\": \"TotalMRR9355\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 460, \"y\": 20, \"z\": 0, \"width\": 200, \"height\": 100, \"tabOrder\": 0}}], \"singleVisual\": {\"visualType\": \"card\", \"projections\": {\"Values\": [{\"queryRef\": \"fact_mrr_movement.Total MRR\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"f\", \"Entity\": \"fact_mrr_movement\", \"Type\": 0}], \"Select\": [{\"Measure\": {\"Expression\": {\"SourceRef\": {\"Source\": \"f\"}}, \"Property\": \"Total MRR\"}, \"Name\": \"fact_mrr_movement.Total MRR\", \"NativeReferenceName\": \"Total MRR\"}]}, \"vcObjects\": {\"title\": [{\"properties\": {\"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}, \"text\": {\"expr\": {\"Literal\": {\"Value\": \"'Total MRR'\"}}}}}]}}}",
+          "filters": "[]"
+        },
+        {
+          "x": 680,
+          "y": 20,
+          "z": 0,
+          "width": 200,
+          "height": 100,
+          "config": "{\"name\": \"MRRMoM%3692\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 680, \"y\": 20, \"z\": 0, \"width\": 200, \"height\": 100, \"tabOrder\": 0}}], \"singleVisual\": {\"visualType\": \"card\", \"projections\": {\"Values\": [{\"queryRef\": \"fact_mrr_movement.MRR MoM %\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"f\", \"Entity\": \"fact_mrr_movement\", \"Type\": 0}], \"Select\": [{\"Measure\": {\"Expression\": {\"SourceRef\": {\"Source\": \"f\"}}, \"Property\": \"MRR MoM %\"}, \"Name\": \"fact_mrr_movement.MRR MoM %\", \"NativeReferenceName\": \"MRR MoM %\"}]}, \"vcObjects\": {\"title\": [{\"properties\": {\"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}, \"text\": {\"expr\": {\"Literal\": {\"Value\": \"'MRR MoM %'\"}}}}}]}}}",
+          "filters": "[]"
+        },
+        {
+          "x": 900,
+          "y": 20,
+          "z": 0,
+          "width": 200,
+          "height": 100,
+          "config": "{\"name\": \"AvgHealthScore9003\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 900, \"y\": 20, \"z\": 0, \"width\": 200, \"height\": 100, \"tabOrder\": 0}}], \"singleVisual\": {\"visualType\": \"card\", \"projections\": {\"Values\": [{\"queryRef\": \"fact_customer_360.Avg Health Score\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"f\", \"Entity\": \"fact_customer_360\", \"Type\": 0}], \"Select\": [{\"Measure\": {\"Expression\": {\"SourceRef\": {\"Source\": \"f\"}}, \"Property\": \"Avg Health Score\"}, \"Name\": \"fact_customer_360.Avg Health Score\", \"NativeReferenceName\": \"Avg Health Score\"}]}, \"vcObjects\": {\"title\": [{\"properties\": {\"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}, \"text\": {\"expr\": {\"Literal\": {\"Value\": \"'Avg Health Score'\"}}}}}]}}}",
+          "filters": "[]"
+        },
+        {
+          "x": 20,
+          "y": 140,
+          "z": 0,
+          "width": 540,
+          "height": 320,
+          "config": "{\"name\": \"ActiveCustomersOverT8786\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 20, \"y\": 140, \"z\": 0, \"width\": 540, \"height\": 320, \"tabOrder\": 0}}], \"singleVisual\": {\"visualType\": \"lineChart\", \"projections\": {\"Category\": [{\"queryRef\": \"fact_mrr_movement.month\"}], \"Y\": [{\"queryRef\": \"fact_mrr_movement.Total MRR\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t\", \"Entity\": \"fact_mrr_movement\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t\"}}, \"Property\": \"month\"}, \"Name\": \"fact_mrr_movement.month\", \"NativeReferenceName\": \"month\"}, {\"Measure\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t\"}}, \"Property\": \"Total MRR\"}, \"Name\": \"fact_mrr_movement.Total MRR\", \"NativeReferenceName\": \"Total MRR\"}]}, \"vcObjects\": {\"title\": [{\"properties\": {\"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}, \"text\": {\"expr\": {\"Literal\": {\"Value\": \"'Active Customers Over Time'\"}}}}}]}}}",
+          "filters": "[]"
+        },
+        {
+          "x": 580,
+          "y": 140,
+          "z": 0,
+          "width": 540,
+          "height": 320,
+          "config": "{\"name\": \"ActiveRatebySegment9715\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 580, \"y\": 140, \"z\": 0, \"width\": 540, \"height\": 320, \"tabOrder\": 0}}], \"singleVisual\": {\"visualType\": \"clusteredBarChart\", \"projections\": {\"Category\": [{\"queryRef\": \"fact_customer_360.segment\"}], \"Y\": [{\"queryRef\": \"fact_customer_360.Active Rate\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t\", \"Entity\": \"fact_customer_360\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t\"}}, \"Property\": \"segment\"}, \"Name\": \"fact_customer_360.segment\", \"NativeReferenceName\": \"segment\"}, {\"Measure\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t\"}}, \"Property\": \"Active Rate\"}, \"Name\": \"fact_customer_360.Active Rate\", \"NativeReferenceName\": \"Active Rate\"}]}, \"vcObjects\": {\"title\": [{\"properties\": {\"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}, \"text\": {\"expr\": {\"Literal\": {\"Value\": \"'Active Rate by Segment'\"}}}}}]}}}",
+          "filters": "[]"
+        },
+        {
+          "x": 20,
+          "y": 480,
+          "z": 0,
+          "width": 540,
+          "height": 280,
+          "config": "{\"name\": \"LogoMovement9671\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 20, \"y\": 480, \"z\": 0, \"width\": 540, \"height\": 280, \"tabOrder\": 0}}], \"singleVisual\": {\"visualType\": \"clusteredColumnChart\", \"projections\": {\"Category\": [{\"queryRef\": \"fact_mrr_movement.month\"}], \"Y\": [{\"queryRef\": \"fact_mrr_movement.New Logos\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t\", \"Entity\": \"fact_mrr_movement\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t\"}}, \"Property\": \"month\"}, \"Name\": \"fact_mrr_movement.month\", \"NativeReferenceName\": \"month\"}, {\"Measure\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t\"}}, \"Property\": \"New Logos\"}, \"Name\": \"fact_mrr_movement.New Logos\", \"NativeReferenceName\": \"New Logos\"}]}, \"vcObjects\": {\"title\": [{\"properties\": {\"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}, \"text\": {\"expr\": {\"Literal\": {\"Value\": \"'Logo Movement'\"}}}}}]}}}",
+          "filters": "[]"
+        },
+        {
+          "x": 580,
+          "y": 480,
+          "z": 0,
+          "width": 540,
+          "height": 280,
+          "config": "{\"name\": \"AtRiskCustomers5939\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 580, \"y\": 480, \"z\": 0, \"width\": 540, \"height\": 280, \"tabOrder\": 0}}], \"singleVisual\": {\"visualType\": \"card\", \"projections\": {\"Values\": [{\"queryRef\": \"fact_customer_360.At Risk Customers\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"f\", \"Entity\": \"fact_customer_360\", \"Type\": 0}], \"Select\": [{\"Measure\": {\"Expression\": {\"SourceRef\": {\"Source\": \"f\"}}, \"Property\": \"At Risk Customers\"}, \"Name\": \"fact_customer_360.At Risk Customers\", \"NativeReferenceName\": \"At Risk Customers\"}]}, \"vcObjects\": {\"title\": [{\"properties\": {\"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}, \"text\": {\"expr\": {\"Literal\": {\"Value\": \"'At Risk Customers'\"}}}}}]}}}",
+          "filters": "[]"
+        }
+      ],
+      "width": 1280,
+      "height": 800,
+      "config": "{\"objects\": {\"section\": [{\"properties\": {\"verticalAlignment\": {\"expr\": {\"Literal\": {\"Value\": \"'Top'\"}}}}}]}}"
+    },
+    {
+      "name": "ReportSectionCohorts",
+      "displayName": "Cohorts",
+      "filters": "[]",
+      "ordinal": 1,
+      "visualContainers": [
+        {
+          "x": 20,
+          "y": 20,
+          "z": 0,
+          "width": 1100,
+          "height": 700,
+          "config": "{\"name\": \"LogoRetentionHeatmap8465\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 20, \"y\": 20, \"z\": 0, \"width\": 1100, \"height\": 700, \"tabOrder\": 0}}], \"singleVisual\": {\"visualType\": \"pivotTable\", \"projections\": {\"Rows\": [{\"queryRef\": \"fact_retention_monthly.cohort_month\"}], \"Columns\": [{\"queryRef\": \"fact_retention_monthly.months_since_signup\"}], \"Values\": [{\"queryRef\": \"fact_retention_monthly.Avg Retention Rate\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"r\", \"Entity\": \"fact_retention_monthly\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"r\"}}, \"Property\": \"cohort_month\"}, \"Name\": \"fact_retention_monthly.cohort_month\"}, {\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"r\"}}, \"Property\": \"months_since_signup\"}, \"Name\": \"fact_retention_monthly.months_since_signup\"}, {\"Measure\": {\"Expression\": {\"SourceRef\": {\"Source\": \"r\"}}, \"Property\": \"Avg Retention Rate\"}, \"Name\": \"fact_retention_monthly.Avg Retention Rate\"}]}, \"vcObjects\": {\"title\": [{\"properties\": {\"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}, \"text\": {\"expr\": {\"Literal\": {\"Value\": \"'Logo Retention Heatmap'\"}}}}}]}}}",
+          "filters": "[]"
+        }
+      ],
+      "width": 1280,
+      "height": 800,
+      "config": "{}"
+    },
+    {
+      "name": "ReportSectionGrowth",
+      "displayName": "Growth",
+      "filters": "[]",
+      "ordinal": 2,
+      "visualContainers": [
+        {
+          "x": 20,
+          "y": 20,
+          "z": 0,
+          "width": 200,
+          "height": 100,
+          "config": "{\"name\": \"NetNewMRR2175\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 20, \"y\": 20, \"z\": 0, \"width\": 200, \"height\": 100, \"tabOrder\": 0}}], \"singleVisual\": {\"visualType\": \"card\", \"projections\": {\"Values\": [{\"queryRef\": \"fact_mrr_movement.Net New MRR\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"f\", \"Entity\": \"fact_mrr_movement\", \"Type\": 0}], \"Select\": [{\"Measure\": {\"Expression\": {\"SourceRef\": {\"Source\": \"f\"}}, \"Property\": \"Net New MRR\"}, \"Name\": \"fact_mrr_movement.Net New MRR\", \"NativeReferenceName\": \"Net New MRR\"}]}, \"vcObjects\": {\"title\": [{\"properties\": {\"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}, \"text\": {\"expr\": {\"Literal\": {\"Value\": \"'Net New MRR'\"}}}}}]}}}",
+          "filters": "[]"
+        },
+        {
+          "x": 240,
+          "y": 20,
+          "z": 0,
+          "width": 200,
+          "height": 100,
+          "config": "{\"name\": \"NewLogos6712\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 240, \"y\": 20, \"z\": 0, \"width\": 200, \"height\": 100, \"tabOrder\": 0}}], \"singleVisual\": {\"visualType\": \"card\", \"projections\": {\"Values\": [{\"queryRef\": \"fact_mrr_movement.New Logos\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"f\", \"Entity\": \"fact_mrr_movement\", \"Type\": 0}], \"Select\": [{\"Measure\": {\"Expression\": {\"SourceRef\": {\"Source\": \"f\"}}, \"Property\": \"New Logos\"}, \"Name\": \"fact_mrr_movement.New Logos\", \"NativeReferenceName\": \"New Logos\"}]}, \"vcObjects\": {\"title\": [{\"properties\": {\"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}, \"text\": {\"expr\": {\"Literal\": {\"Value\": \"'New Logos'\"}}}}}]}}}",
+          "filters": "[]"
+        },
+        {
+          "x": 460,
+          "y": 20,
+          "z": 0,
+          "width": 200,
+          "height": 100,
+          "config": "{\"name\": \"TotalARR4307\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 460, \"y\": 20, \"z\": 0, \"width\": 200, \"height\": 100, \"tabOrder\": 0}}], \"singleVisual\": {\"visualType\": \"card\", \"projections\": {\"Values\": [{\"queryRef\": \"fact_mrr_movement.Total ARR\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"f\", \"Entity\": \"fact_mrr_movement\", \"Type\": 0}], \"Select\": [{\"Measure\": {\"Expression\": {\"SourceRef\": {\"Source\": \"f\"}}, \"Property\": \"Total ARR\"}, \"Name\": \"fact_mrr_movement.Total ARR\", \"NativeReferenceName\": \"Total ARR\"}]}, \"vcObjects\": {\"title\": [{\"properties\": {\"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}, \"text\": {\"expr\": {\"Literal\": {\"Value\": \"'Total ARR'\"}}}}}]}}}",
+          "filters": "[]"
+        },
+        {
+          "x": 20,
+          "y": 140,
+          "z": 0,
+          "width": 540,
+          "height": 400,
+          "config": "{\"name\": \"MRRGrowth8362\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 20, \"y\": 140, \"z\": 0, \"width\": 540, \"height\": 400, \"tabOrder\": 0}}], \"singleVisual\": {\"visualType\": \"lineChart\", \"projections\": {\"Category\": [{\"queryRef\": \"fact_mrr_movement.month\"}], \"Y\": [{\"queryRef\": \"fact_mrr_movement.Net New MRR\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t\", \"Entity\": \"fact_mrr_movement\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t\"}}, \"Property\": \"month\"}, \"Name\": \"fact_mrr_movement.month\", \"NativeReferenceName\": \"month\"}, {\"Measure\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t\"}}, \"Property\": \"Net New MRR\"}, \"Name\": \"fact_mrr_movement.Net New MRR\", \"NativeReferenceName\": \"Net New MRR\"}]}, \"vcObjects\": {\"title\": [{\"properties\": {\"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}, \"text\": {\"expr\": {\"Literal\": {\"Value\": \"'MRR Growth'\"}}}}}]}}}",
+          "filters": "[]"
+        },
+        {
+          "x": 580,
+          "y": 140,
+          "z": 0,
+          "width": 540,
+          "height": 400,
+          "config": "{\"name\": \"ActiveMixbyPlan6493\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 580, \"y\": 140, \"z\": 0, \"width\": 540, \"height\": 400, \"tabOrder\": 0}}], \"singleVisual\": {\"visualType\": \"clusteredBarChart\", \"projections\": {\"Category\": [{\"queryRef\": \"fact_customer_360.plan\"}], \"Y\": [{\"queryRef\": \"fact_customer_360.Active Customers\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t\", \"Entity\": \"fact_customer_360\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t\"}}, \"Property\": \"plan\"}, \"Name\": \"fact_customer_360.plan\", \"NativeReferenceName\": \"plan\"}, {\"Measure\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t\"}}, \"Property\": \"Active Customers\"}, \"Name\": \"fact_customer_360.Active Customers\", \"NativeReferenceName\": \"Active Customers\"}]}, \"vcObjects\": {\"title\": [{\"properties\": {\"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}, \"text\": {\"expr\": {\"Literal\": {\"Value\": \"'Active Mix by Plan'\"}}}}}]}}}",
+          "filters": "[]"
+        },
+        {
+          "x": 20,
+          "y": 560,
+          "z": 0,
+          "width": 1100,
+          "height": 200,
+          "config": "{\"name\": \"ActiveMixbyRegion9700\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 20, \"y\": 560, \"z\": 0, \"width\": 1100, \"height\": 200, \"tabOrder\": 0}}], \"singleVisual\": {\"visualType\": \"clusteredBarChart\", \"projections\": {\"Category\": [{\"queryRef\": \"fact_customer_360.region\"}], \"Y\": [{\"queryRef\": \"fact_customer_360.Active Customers\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t\", \"Entity\": \"fact_customer_360\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t\"}}, \"Property\": \"region\"}, \"Name\": \"fact_customer_360.region\", \"NativeReferenceName\": \"region\"}, {\"Measure\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t\"}}, \"Property\": \"Active Customers\"}, \"Name\": \"fact_customer_360.Active Customers\", \"NativeReferenceName\": \"Active Customers\"}]}, \"vcObjects\": {\"title\": [{\"properties\": {\"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}, \"text\": {\"expr\": {\"Literal\": {\"Value\": \"'Active Mix by Region'\"}}}}}]}}}",
+          "filters": "[]"
+        }
+      ],
+      "width": 1280,
+      "height": 800,
+      "config": "{}"
+    }
+  ],
+  "layoutOptimization": 0
+}

@@ -1,0 +1,1082 @@
+{
+  "name": "CustomerInsights",
+  "compatibilityLevel": 1550,
+  "model": {
+    "culture": "en-US",
+    "defaultPowerBIDataSourceVersion": "powerBI_V3",
+    "sourceQueryCulture": "en-US",
+    "dataAccessOptions": {
+      "legacyRedirects": true,
+      "returnErrorValuesAsNull": true
+    },
+    "tables": [
+      {
+        "name": "fact_customer_360",
+        "columns": [
+          {
+            "name": "customer_id",
+            "dataType": "string",
+            "sourceColumn": "customer_id",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "signup_date",
+            "dataType": "dateTime",
+            "sourceColumn": "signup_date",
+            "summarizeBy": "none",
+            "formatString": "yyyy-mm-dd"
+          },
+          {
+            "name": "segment",
+            "dataType": "string",
+            "sourceColumn": "segment",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "region",
+            "dataType": "string",
+            "sourceColumn": "region",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "plan",
+            "dataType": "string",
+            "sourceColumn": "plan",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "acquisition_channel",
+            "dataType": "string",
+            "sourceColumn": "acquisition_channel",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "seats",
+            "dataType": "int64",
+            "sourceColumn": "seats",
+            "summarizeBy": "sum",
+            "formatString": "0"
+          },
+          {
+            "name": "mrr",
+            "dataType": "double",
+            "sourceColumn": "mrr",
+            "summarizeBy": "sum",
+            "formatString": "#,##0.00"
+          },
+          {
+            "name": "tenure_days",
+            "dataType": "int64",
+            "sourceColumn": "tenure_days",
+            "summarizeBy": "sum",
+            "formatString": "0"
+          },
+          {
+            "name": "monthly_active_days",
+            "dataType": "double",
+            "sourceColumn": "monthly_active_days",
+            "summarizeBy": "average",
+            "formatString": "0.0"
+          },
+          {
+            "name": "support_tickets_90d",
+            "dataType": "int64",
+            "sourceColumn": "support_tickets_90d",
+            "summarizeBy": "sum",
+            "formatString": "0"
+          },
+          {
+            "name": "nps_score",
+            "dataType": "double",
+            "sourceColumn": "nps_score",
+            "summarizeBy": "average",
+            "formatString": "0.0"
+          },
+          {
+            "name": "feature_adoption_score",
+            "dataType": "double",
+            "sourceColumn": "feature_adoption_score",
+            "summarizeBy": "average",
+            "formatString": "0.00"
+          },
+          {
+            "name": "payment_failures_90d",
+            "dataType": "int64",
+            "sourceColumn": "payment_failures_90d",
+            "summarizeBy": "sum",
+            "formatString": "0"
+          },
+          {
+            "name": "is_churned",
+            "dataType": "int64",
+            "sourceColumn": "is_churned",
+            "summarizeBy": "sum",
+            "formatString": "0"
+          },
+          {
+            "name": "churn_date",
+            "dataType": "dateTime",
+            "sourceColumn": "churn_date",
+            "summarizeBy": "none",
+            "formatString": "yyyy-mm-dd"
+          },
+          {
+            "name": "as_of_date",
+            "dataType": "dateTime",
+            "sourceColumn": "as_of_date",
+            "summarizeBy": "none",
+            "formatString": "yyyy-mm-dd"
+          },
+          {
+            "name": "lifetime_revenue",
+            "dataType": "double",
+            "sourceColumn": "lifetime_revenue",
+            "summarizeBy": "sum",
+            "formatString": "#,##0.00"
+          },
+          {
+            "name": "txn_count",
+            "dataType": "int64",
+            "sourceColumn": "txn_count",
+            "summarizeBy": "sum",
+            "formatString": "0"
+          },
+          {
+            "name": "last_txn_date",
+            "dataType": "dateTime",
+            "sourceColumn": "last_txn_date",
+            "summarizeBy": "none",
+            "formatString": "yyyy-mm-dd"
+          },
+          {
+            "name": "first_txn_date",
+            "dataType": "dateTime",
+            "sourceColumn": "first_txn_date",
+            "summarizeBy": "none",
+            "formatString": "yyyy-mm-dd"
+          },
+          {
+            "name": "avg_txn_amount",
+            "dataType": "double",
+            "sourceColumn": "avg_txn_amount",
+            "summarizeBy": "average",
+            "formatString": "#,##0.00"
+          },
+          {
+            "name": "total_tickets",
+            "dataType": "int64",
+            "sourceColumn": "total_tickets",
+            "summarizeBy": "sum",
+            "formatString": "0"
+          },
+          {
+            "name": "avg_resolve_hours",
+            "dataType": "double",
+            "sourceColumn": "avg_resolve_hours",
+            "summarizeBy": "average",
+            "formatString": "0.0"
+          },
+          {
+            "name": "critical_tickets",
+            "dataType": "int64",
+            "sourceColumn": "critical_tickets",
+            "summarizeBy": "sum",
+            "formatString": "0"
+          },
+          {
+            "name": "days_since_last_txn",
+            "dataType": "double",
+            "sourceColumn": "days_since_last_txn",
+            "summarizeBy": "average",
+            "formatString": "0.0"
+          },
+          {
+            "name": "is_active",
+            "dataType": "int64",
+            "sourceColumn": "is_active",
+            "summarizeBy": "sum",
+            "formatString": "0"
+          },
+          {
+            "name": "customer_health_score",
+            "dataType": "double",
+            "sourceColumn": "customer_health_score",
+            "summarizeBy": "average",
+            "formatString": "0.0"
+          }
+        ],
+        "measures": [
+          {
+            "name": "Active Customers",
+            "expression": [
+              "CALCULATE ( COUNTROWS ( fact_customer_360 ), fact_customer_360[is_active] = 1 )"
+            ],
+            "formatString": "#,##0"
+          },
+          {
+            "name": "Churned Customers",
+            "expression": [
+              "CALCULATE ( COUNTROWS ( fact_customer_360 ), fact_customer_360[is_churned] = 1 )"
+            ],
+            "formatString": "#,##0"
+          },
+          {
+            "name": "Avg Health Score",
+            "expression": [
+              "AVERAGE ( fact_customer_360[customer_health_score] )"
+            ],
+            "formatString": "0.0"
+          },
+          {
+            "name": "At Risk Customers",
+            "expression": [
+              "CALCULATE (",
+              "    COUNTROWS ( fact_customer_360 ),",
+              "    fact_customer_360[is_churned] = 0,",
+              "    fact_customer_360[mrr] > 0,",
+              "    OR (",
+              "        fact_customer_360[customer_health_score] < 45,",
+              "        OR (",
+              "            fact_customer_360[payment_failures_90d] >= 2,",
+              "            fact_customer_360[monthly_active_days] < 5",
+              "        )",
+              "    )",
+              ")"
+            ],
+            "formatString": "#,##0"
+          },
+          {
+            "name": "Customer Count",
+            "expression": [
+              "COUNTROWS ( fact_customer_360 )"
+            ],
+            "formatString": "#,##0"
+          },
+          {
+            "name": "Active Rate",
+            "expression": [
+              "DIVIDE ( [Active Customers], [Customer Count] )"
+            ],
+            "formatString": "0.0%"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "fact_customer_360",
+            "mode": "import",
+            "source": [
+              {
+                "type": "m",
+                "expression": [
+                  "let",
+                  "    Source = Csv.Document(",
+                  "        File.Contents(MartsFolder & \"customer_360.csv\"),",
+                  "        [Delimiter=\",\", Columns=28, Encoding=65001, QuoteStyle=QuoteStyle.Csv]",
+                  "    ),",
+                  "    #\"Promoted Headers\" = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),",
+                  "    #\"Changed Type\" = Table.TransformColumnTypes(#\"Promoted Headers\", {{\"customer_id\", type text}, {\"signup_date\", type date}, {\"segment\", type text}, {\"region\", type text}, {\"plan\", type text}, {\"acquisition_channel\", type text}, {\"seats\", Int64.Type}, {\"mrr\", type number}, {\"tenure_days\", Int64.Type}, {\"monthly_active_days\", type number}, {\"support_tickets_90d\", Int64.Type}, {\"nps_score\", type number}, {\"feature_adoption_score\", type number}, {\"payment_failures_90d\", Int64.Type}, {\"is_churned\", Int64.Type}, {\"churn_date\", type date}, {\"as_of_date\", type date}, {\"lifetime_revenue\", type number}, {\"txn_count\", Int64.Type}, {\"last_txn_date\", type date}, {\"first_txn_date\", type date}, {\"avg_txn_amount\", type number}, {\"total_tickets\", Int64.Type}, {\"avg_resolve_hours\", type number}, {\"critical_tickets\", Int64.Type}, {\"days_since_last_txn\", type number}, {\"is_active\", Int64.Type}, {\"customer_health_score\", type number}})",
+                  "in",
+                  "    #\"Changed Type\""
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "fact_mrr_movement",
+        "columns": [
+          {
+            "name": "month",
+            "dataType": "dateTime",
+            "sourceColumn": "month",
+            "summarizeBy": "none",
+            "formatString": "yyyy-mm"
+          },
+          {
+            "name": "active_customers",
+            "dataType": "int64",
+            "sourceColumn": "active_customers",
+            "summarizeBy": "sum",
+            "formatString": "0"
+          },
+          {
+            "name": "mrr",
+            "dataType": "double",
+            "sourceColumn": "mrr",
+            "summarizeBy": "sum",
+            "formatString": "#,##0.00"
+          },
+          {
+            "name": "arr",
+            "dataType": "double",
+            "sourceColumn": "arr",
+            "summarizeBy": "sum",
+            "formatString": "#,##0.00"
+          },
+          {
+            "name": "new_customers",
+            "dataType": "int64",
+            "sourceColumn": "new_customers",
+            "summarizeBy": "sum",
+            "formatString": "0"
+          },
+          {
+            "name": "new_mrr",
+            "dataType": "double",
+            "sourceColumn": "new_mrr",
+            "summarizeBy": "sum",
+            "formatString": "#,##0.00"
+          },
+          {
+            "name": "churned_customers",
+            "dataType": "int64",
+            "sourceColumn": "churned_customers",
+            "summarizeBy": "sum",
+            "formatString": "0"
+          },
+          {
+            "name": "churned_mrr",
+            "dataType": "double",
+            "sourceColumn": "churned_mrr",
+            "summarizeBy": "sum",
+            "formatString": "#,##0.00"
+          },
+          {
+            "name": "logo_churn_rate",
+            "dataType": "double",
+            "sourceColumn": "logo_churn_rate",
+            "summarizeBy": "average",
+            "formatString": "0.0%"
+          },
+          {
+            "name": "net_new_mrr",
+            "dataType": "double",
+            "sourceColumn": "net_new_mrr",
+            "summarizeBy": "sum",
+            "formatString": "#,##0.00"
+          },
+          {
+            "name": "mrr_growth_pct",
+            "dataType": "double",
+            "sourceColumn": "mrr_growth_pct",
+            "summarizeBy": "average",
+            "formatString": "0.0%"
+          }
+        ],
+        "measures": [
+          {
+            "name": "Total MRR",
+            "expression": [
+              "SUM ( fact_mrr_movement[mrr] )"
+            ],
+            "formatString": "#,##0.00"
+          },
+          {
+            "name": "Total ARR",
+            "expression": [
+              "SUM ( fact_mrr_movement[arr] )"
+            ],
+            "formatString": "#,##0.00"
+          },
+          {
+            "name": "Net New MRR",
+            "expression": [
+              "SUM ( fact_mrr_movement[net_new_mrr] )"
+            ],
+            "formatString": "#,##0.00"
+          },
+          {
+            "name": "Logo Churn Rate",
+            "expression": [
+              "DIVIDE (",
+              "    SUM ( fact_mrr_movement[churned_customers] ),",
+              "    SUM ( fact_mrr_movement[active_customers] ) + SUM ( fact_mrr_movement[churned_customers] )",
+              ")"
+            ],
+            "formatString": "0.0%"
+          },
+          {
+            "name": "MRR MoM %",
+            "expression": [
+              "VAR Curr = [Total MRR]",
+              "VAR Prev =",
+              "    CALCULATE ( [Total MRR], DATEADD ( fact_mrr_movement[month], -1, MONTH ) )",
+              "RETURN",
+              "    DIVIDE ( Curr - Prev, Prev )"
+            ],
+            "formatString": "0.0%"
+          },
+          {
+            "name": "New Logos",
+            "expression": [
+              "SUM ( fact_mrr_movement[new_customers] )"
+            ],
+            "formatString": "#,##0"
+          },
+          {
+            "name": "Churned Logos",
+            "expression": [
+              "SUM ( fact_mrr_movement[churned_customers] )"
+            ],
+            "formatString": "#,##0"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "fact_mrr_movement",
+            "mode": "import",
+            "source": [
+              {
+                "type": "m",
+                "expression": [
+                  "let",
+                  "    Source = Csv.Document(",
+                  "        File.Contents(MartsFolder & \"mrr_movement.csv\"),",
+                  "        [Delimiter=\",\", Columns=11, Encoding=65001, QuoteStyle=QuoteStyle.Csv]",
+                  "    ),",
+                  "    #\"Promoted Headers\" = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),",
+                  "    #\"Changed Type\" = Table.TransformColumnTypes(#\"Promoted Headers\", {{\"month\", type text}, {\"active_customers\", Int64.Type}, {\"mrr\", type number}, {\"arr\", type number}, {\"new_customers\", Int64.Type}, {\"new_mrr\", type number}, {\"churned_customers\", Int64.Type}, {\"churned_mrr\", type number}, {\"logo_churn_rate\", type number}, {\"net_new_mrr\", type number}, {\"mrr_growth_pct\", type number}}),",
+                  "    #\"month as date\" = Table.TransformColumns(#\"Changed Type\", {{\"month\", each try Date.From(Text.From(_) & \"-01\") otherwise null, type date}})",
+                  "in",
+                  "    #\"month as date\""
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "fact_retention_monthly",
+        "columns": [
+          {
+            "name": "cohort_month",
+            "dataType": "dateTime",
+            "sourceColumn": "cohort_month",
+            "summarizeBy": "none",
+            "formatString": "yyyy-mm"
+          },
+          {
+            "name": "months_since_signup",
+            "dataType": "int64",
+            "sourceColumn": "months_since_signup",
+            "summarizeBy": "sum",
+            "formatString": "0"
+          },
+          {
+            "name": "cohort_size",
+            "dataType": "int64",
+            "sourceColumn": "cohort_size",
+            "summarizeBy": "sum",
+            "formatString": "0"
+          },
+          {
+            "name": "customers_retained",
+            "dataType": "int64",
+            "sourceColumn": "customers_retained",
+            "summarizeBy": "sum",
+            "formatString": "0"
+          },
+          {
+            "name": "retention_rate",
+            "dataType": "double",
+            "sourceColumn": "retention_rate",
+            "summarizeBy": "average",
+            "formatString": "0.0%"
+          }
+        ],
+        "measures": [
+          {
+            "name": "Avg Retention Rate",
+            "expression": [
+              "AVERAGE ( fact_retention_monthly[retention_rate] )"
+            ],
+            "formatString": "0.0%"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "fact_retention_monthly",
+            "mode": "import",
+            "source": [
+              {
+                "type": "m",
+                "expression": [
+                  "let",
+                  "    Source = Csv.Document(",
+                  "        File.Contents(MartsFolder & \"retention_monthly.csv\"),",
+                  "        [Delimiter=\",\", Columns=5, Encoding=65001, QuoteStyle=QuoteStyle.Csv]",
+                  "    ),",
+                  "    #\"Promoted Headers\" = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),",
+                  "    #\"Changed Type\" = Table.TransformColumnTypes(#\"Promoted Headers\", {{\"cohort_month\", type text}, {\"months_since_signup\", Int64.Type}, {\"cohort_size\", Int64.Type}, {\"customers_retained\", Int64.Type}, {\"retention_rate\", type number}}),",
+                  "    #\"cohort_month as date\" = Table.TransformColumns(#\"Changed Type\", {{\"cohort_month\", each try Date.From(Text.From(_) & \"-01\") otherwise null, type date}})",
+                  "in",
+                  "    #\"cohort_month as date\""
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "fact_revenue_cohorts",
+        "columns": [
+          {
+            "name": "cohort_month",
+            "dataType": "dateTime",
+            "sourceColumn": "cohort_month",
+            "summarizeBy": "none",
+            "formatString": "yyyy-mm"
+          },
+          {
+            "name": "months_since_signup",
+            "dataType": "int64",
+            "sourceColumn": "months_since_signup",
+            "summarizeBy": "sum",
+            "formatString": "0"
+          },
+          {
+            "name": "revenue",
+            "dataType": "double",
+            "sourceColumn": "revenue",
+            "summarizeBy": "sum",
+            "formatString": "#,##0.00"
+          },
+          {
+            "name": "paying_customers",
+            "dataType": "int64",
+            "sourceColumn": "paying_customers",
+            "summarizeBy": "sum",
+            "formatString": "0"
+          },
+          {
+            "name": "txn_count",
+            "dataType": "int64",
+            "sourceColumn": "txn_count",
+            "summarizeBy": "sum",
+            "formatString": "0"
+          },
+          {
+            "name": "cohort_size",
+            "dataType": "int64",
+            "sourceColumn": "cohort_size",
+            "summarizeBy": "sum",
+            "formatString": "0"
+          },
+          {
+            "name": "revenue_per_customer",
+            "dataType": "double",
+            "sourceColumn": "revenue_per_customer",
+            "summarizeBy": "average",
+            "formatString": "#,##0.00"
+          }
+        ],
+        "measures": [
+          {
+            "name": "Revenue Per Customer",
+            "expression": [
+              "AVERAGE ( fact_revenue_cohorts[revenue_per_customer] )"
+            ],
+            "formatString": "#,##0.00"
+          },
+          {
+            "name": "Cohort Revenue",
+            "expression": [
+              "SUM ( fact_revenue_cohorts[revenue] )"
+            ],
+            "formatString": "#,##0.00"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "fact_revenue_cohorts",
+            "mode": "import",
+            "source": [
+              {
+                "type": "m",
+                "expression": [
+                  "let",
+                  "    Source = Csv.Document(",
+                  "        File.Contents(MartsFolder & \"revenue_cohorts.csv\"),",
+                  "        [Delimiter=\",\", Columns=7, Encoding=65001, QuoteStyle=QuoteStyle.Csv]",
+                  "    ),",
+                  "    #\"Promoted Headers\" = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),",
+                  "    #\"Changed Type\" = Table.TransformColumnTypes(#\"Promoted Headers\", {{\"cohort_month\", type text}, {\"months_since_signup\", Int64.Type}, {\"revenue\", type number}, {\"paying_customers\", Int64.Type}, {\"txn_count\", Int64.Type}, {\"cohort_size\", Int64.Type}, {\"revenue_per_customer\", type number}}),",
+                  "    #\"cohort_month as date\" = Table.TransformColumns(#\"Changed Type\", {{\"cohort_month\", each try Date.From(Text.From(_) & \"-01\") otherwise null, type date}})",
+                  "in",
+                  "    #\"cohort_month as date\""
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "fact_product_revenue",
+        "columns": [
+          {
+            "name": "txn_month",
+            "dataType": "dateTime",
+            "sourceColumn": "txn_month",
+            "summarizeBy": "none",
+            "formatString": "yyyy-mm"
+          },
+          {
+            "name": "product",
+            "dataType": "string",
+            "sourceColumn": "product",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "revenue",
+            "dataType": "double",
+            "sourceColumn": "revenue",
+            "summarizeBy": "sum",
+            "formatString": "#,##0.00"
+          },
+          {
+            "name": "txn_count",
+            "dataType": "int64",
+            "sourceColumn": "txn_count",
+            "summarizeBy": "sum",
+            "formatString": "0"
+          },
+          {
+            "name": "customers",
+            "dataType": "int64",
+            "sourceColumn": "customers",
+            "summarizeBy": "sum",
+            "formatString": "0"
+          }
+        ],
+        "measures": [
+          {
+            "name": "Product Revenue",
+            "expression": [
+              "SUM ( fact_product_revenue[revenue] )"
+            ],
+            "formatString": "#,##0.00"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "fact_product_revenue",
+            "mode": "import",
+            "source": [
+              {
+                "type": "m",
+                "expression": [
+                  "let",
+                  "    Source = Csv.Document(",
+                  "        File.Contents(MartsFolder & \"product_revenue.csv\"),",
+                  "        [Delimiter=\",\", Columns=5, Encoding=65001, QuoteStyle=QuoteStyle.Csv]",
+                  "    ),",
+                  "    #\"Promoted Headers\" = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),",
+                  "    #\"Changed Type\" = Table.TransformColumnTypes(#\"Promoted Headers\", {{\"txn_month\", type text}, {\"product\", type text}, {\"revenue\", type number}, {\"txn_count\", Int64.Type}, {\"customers\", Int64.Type}}),",
+                  "    #\"txn_month as date\" = Table.TransformColumns(#\"Changed Type\", {{\"txn_month\", each try Date.From(Text.From(_) & \"-01\") otherwise null, type date}})",
+                  "in",
+                  "    #\"txn_month as date\""
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "dim_segment_perf",
+        "columns": [
+          {
+            "name": "segment",
+            "dataType": "string",
+            "sourceColumn": "segment",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "region",
+            "dataType": "string",
+            "sourceColumn": "region",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "plan",
+            "dataType": "string",
+            "sourceColumn": "plan",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "customers",
+            "dataType": "int64",
+            "sourceColumn": "customers",
+            "summarizeBy": "sum",
+            "formatString": "0"
+          },
+          {
+            "name": "active_customers",
+            "dataType": "int64",
+            "sourceColumn": "active_customers",
+            "summarizeBy": "sum",
+            "formatString": "0"
+          },
+          {
+            "name": "churned",
+            "dataType": "int64",
+            "sourceColumn": "churned",
+            "summarizeBy": "sum",
+            "formatString": "0"
+          },
+          {
+            "name": "total_mrr",
+            "dataType": "double",
+            "sourceColumn": "total_mrr",
+            "summarizeBy": "sum",
+            "formatString": "#,##0.00"
+          },
+          {
+            "name": "avg_mrr",
+            "dataType": "double",
+            "sourceColumn": "avg_mrr",
+            "summarizeBy": "average",
+            "formatString": "#,##0.00"
+          },
+          {
+            "name": "avg_health",
+            "dataType": "double",
+            "sourceColumn": "avg_health",
+            "summarizeBy": "average",
+            "formatString": "0.0"
+          },
+          {
+            "name": "avg_nps",
+            "dataType": "double",
+            "sourceColumn": "avg_nps",
+            "summarizeBy": "average",
+            "formatString": "0.0"
+          },
+          {
+            "name": "lifetime_revenue",
+            "dataType": "double",
+            "sourceColumn": "lifetime_revenue",
+            "summarizeBy": "sum",
+            "formatString": "#,##0.00"
+          },
+          {
+            "name": "churn_rate",
+            "dataType": "double",
+            "sourceColumn": "churn_rate",
+            "summarizeBy": "average",
+            "formatString": "0.0%"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "dim_segment_perf",
+            "mode": "import",
+            "source": [
+              {
+                "type": "m",
+                "expression": [
+                  "let",
+                  "    Source = Csv.Document(",
+                  "        File.Contents(MartsFolder & \"segment_performance.csv\"),",
+                  "        [Delimiter=\",\", Columns=12, Encoding=65001, QuoteStyle=QuoteStyle.Csv]",
+                  "    ),",
+                  "    #\"Promoted Headers\" = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),",
+                  "    #\"Changed Type\" = Table.TransformColumnTypes(#\"Promoted Headers\", {{\"segment\", type text}, {\"region\", type text}, {\"plan\", type text}, {\"customers\", Int64.Type}, {\"active_customers\", Int64.Type}, {\"churned\", Int64.Type}, {\"total_mrr\", type number}, {\"avg_mrr\", type number}, {\"avg_health\", type number}, {\"avg_nps\", type number}, {\"lifetime_revenue\", type number}, {\"churn_rate\", type number}})",
+                  "in",
+                  "    #\"Changed Type\""
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "fact_support_sla",
+        "columns": [
+          {
+            "name": "event_id",
+            "dataType": "string",
+            "sourceColumn": "event_id",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "customer_id",
+            "dataType": "string",
+            "sourceColumn": "customer_id",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "opened_at",
+            "dataType": "dateTime",
+            "sourceColumn": "opened_at",
+            "summarizeBy": "none",
+            "formatString": "General Date"
+          },
+          {
+            "name": "resolved_at",
+            "dataType": "dateTime",
+            "sourceColumn": "resolved_at",
+            "summarizeBy": "none",
+            "formatString": "General Date"
+          },
+          {
+            "name": "sla_due_at",
+            "dataType": "dateTime",
+            "sourceColumn": "sla_due_at",
+            "summarizeBy": "none",
+            "formatString": "General Date"
+          },
+          {
+            "name": "opened_date",
+            "dataType": "dateTime",
+            "sourceColumn": "opened_date",
+            "summarizeBy": "none",
+            "formatString": "yyyy-mm-dd"
+          },
+          {
+            "name": "status",
+            "dataType": "string",
+            "sourceColumn": "status",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "priority",
+            "dataType": "string",
+            "sourceColumn": "priority",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "reason",
+            "dataType": "string",
+            "sourceColumn": "reason",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "category",
+            "dataType": "string",
+            "sourceColumn": "category",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "channel",
+            "dataType": "string",
+            "sourceColumn": "channel",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "csat",
+            "dataType": "double",
+            "sourceColumn": "csat",
+            "summarizeBy": "average",
+            "formatString": "0.0"
+          },
+          {
+            "name": "resolved_hours",
+            "dataType": "double",
+            "sourceColumn": "resolved_hours",
+            "summarizeBy": "average",
+            "formatString": "0.0"
+          },
+          {
+            "name": "age_hours",
+            "dataType": "double",
+            "sourceColumn": "age_hours",
+            "summarizeBy": "average",
+            "formatString": "0.0"
+          },
+          {
+            "name": "is_open",
+            "dataType": "int64",
+            "sourceColumn": "is_open",
+            "summarizeBy": "sum",
+            "formatString": "0"
+          },
+          {
+            "name": "sla_breach",
+            "dataType": "boolean",
+            "sourceColumn": "sla_breach",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "sla_status",
+            "dataType": "string",
+            "sourceColumn": "sla_status",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "segment",
+            "dataType": "string",
+            "sourceColumn": "segment",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "region",
+            "dataType": "string",
+            "sourceColumn": "region",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "plan",
+            "dataType": "string",
+            "sourceColumn": "plan",
+            "summarizeBy": "none"
+          }
+        ],
+        "measures": [
+          {
+            "name": "Ticket Volume",
+            "expression": [
+              "COUNTROWS ( fact_support_sla )"
+            ],
+            "formatString": "#,##0"
+          },
+          {
+            "name": "Avg CSAT",
+            "expression": [
+              "AVERAGE ( fact_support_sla[csat] )"
+            ],
+            "formatString": "0.00"
+          },
+          {
+            "name": "Within SLA %",
+            "expression": [
+              "DIVIDE (",
+              "    CALCULATE ( COUNTROWS ( fact_support_sla ), fact_support_sla[sla_status] = \"within_sla\" ),",
+              "    CALCULATE ( COUNTROWS ( fact_support_sla ), fact_support_sla[is_open] = 0 )",
+              ")"
+            ],
+            "formatString": "0.0%"
+          },
+          {
+            "name": "Pending Tickets",
+            "expression": [
+              "CALCULATE (",
+              "    COUNTROWS ( fact_support_sla ),",
+              "    fact_support_sla[status] IN { \"pending\", \"escalated\" }",
+              ")"
+            ],
+            "formatString": "#,##0"
+          },
+          {
+            "name": "Open Tickets",
+            "expression": [
+              "CALCULATE ( COUNTROWS ( fact_support_sla ), fact_support_sla[is_open] = 1 )"
+            ],
+            "formatString": "#,##0"
+          },
+          {
+            "name": "Avg Resolve Hours",
+            "expression": [
+              "AVERAGE ( fact_support_sla[resolved_hours] )"
+            ],
+            "formatString": "0.0"
+          },
+          {
+            "name": "Breach Count",
+            "expression": [
+              "CALCULATE ( COUNTROWS ( fact_support_sla ), fact_support_sla[sla_breach] = TRUE () )"
+            ],
+            "formatString": "#,##0"
+          },
+          {
+            "name": "Beyond Aging Threshold",
+            "expression": [
+              "VAR Threshold = [Aging Threshold Hours]",
+              "RETURN",
+              "    CALCULATE (",
+              "        COUNTROWS ( fact_support_sla ),",
+              "        fact_support_sla[is_open] = 1,",
+              "        fact_support_sla[age_hours] >= Threshold",
+              "    )"
+            ],
+            "formatString": "#,##0"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "fact_support_sla",
+            "mode": "import",
+            "source": [
+              {
+                "type": "m",
+                "expression": [
+                  "let",
+                  "    Source = Csv.Document(",
+                  "        File.Contents(MartsFolder & \"support_sla.csv\"),",
+                  "        [Delimiter=\",\", Columns=20, Encoding=65001, QuoteStyle=QuoteStyle.Csv]",
+                  "    ),",
+                  "    #\"Promoted Headers\" = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),",
+                  "    #\"Changed Type\" = Table.TransformColumnTypes(#\"Promoted Headers\", {{\"event_id\", type text}, {\"customer_id\", type text}, {\"opened_at\", type datetime}, {\"resolved_at\", type datetime}, {\"sla_due_at\", type datetime}, {\"opened_date\", type date}, {\"status\", type text}, {\"priority\", type text}, {\"reason\", type text}, {\"category\", type text}, {\"channel\", type text}, {\"csat\", type number}, {\"resolved_hours\", type number}, {\"age_hours\", type number}, {\"is_open\", Int64.Type}, {\"sla_breach\", type logical}, {\"sla_status\", type text}, {\"segment\", type text}, {\"region\", type text}, {\"plan\", type text}})",
+                  "in",
+                  "    #\"Changed Type\""
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Aging Threshold",
+        "columns": [
+          {
+            "name": "Aging Threshold Hours",
+            "dataType": "int64",
+            "isNameInferred": false,
+            "isDataTypeInferred": false,
+            "formatString": "0",
+            "summarizeBy": "none",
+            "isHidden": false
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Aging Threshold",
+            "mode": "import",
+            "source": [
+              {
+                "type": "calculated",
+                "expression": [
+                  "DATATABLE ( \"Aging Threshold Hours\", INTEGER, {{72}} )"
+                ]
+              }
+            ]
+          }
+        ],
+        "measures": [
+          {
+            "name": "Aging Threshold Hours",
+            "expression": [
+              "SELECTEDVALUE ( 'Aging Threshold'[Aging Threshold Hours], 72 )"
+            ],
+            "formatString": "0"
+          }
+        ]
+      }
+    ],
+    "relationships": [
+      {
+        "name": "rel_support_to_customer",
+        "fromTable": "fact_support_sla",
+        "fromColumn": "customer_id",
+        "toTable": "fact_customer_360",
+        "toColumn": "customer_id",
+        "crossFilteringBehavior": "oneDirection"
+      }
+    ],
+    "expressions": [
+      {
+        "name": "MartsFolder",
+        "kind": "m",
+        "expression": [
+          "\"./../data/\" meta [IsParameterQuery=true, Type=\"Text\", IsParameterQueryRequired=true]"
+        ]
+      }
+    ],
+    "annotations": [
+      {
+        "name": "PBI_QueryOrder",
+        "value": "[\"MartsFolder\", \"fact_customer_360\", \"fact_mrr_movement\", \"fact_retention_monthly\", \"fact_revenue_cohorts\", \"fact_product_revenue\", \"dim_segment_perf\", \"fact_support_sla\"]"
+      }
+    ]
+  }
+}

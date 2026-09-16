@@ -1,0 +1,5 @@
+# Power BI Desktop local caches (machine-specific)
+**/.pbi/localSettings.json
+**/.pbi/cache.abf
+**/Cache/
+*.pbix.bak

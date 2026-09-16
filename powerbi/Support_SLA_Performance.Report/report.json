@@ -1,0 +1,211 @@
+{
+  "config": "{\"version\": \"5.43\", \"themeCollection\": {\"baseTheme\": {\"name\": \"CY23SU08\", \"version\": \"5.43\", \"type\": 2}}, \"activeSectionIndex\": 0, \"defaultDrillFilterOtherVisuals\": true, \"settings\": {\"useNewFilterPaneExperience\": true}}",
+  "filters": "[]",
+  "sections": [
+    {
+      "name": "ReportSectionOverview",
+      "displayName": "Overview",
+      "filters": "[]",
+      "ordinal": 0,
+      "visualContainers": [
+        {
+          "x": 20,
+          "y": 20,
+          "z": 0,
+          "width": 200,
+          "height": 100,
+          "config": "{\"name\": \"TicketVolume5118\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 20, \"y\": 20, \"z\": 0, \"width\": 200, \"height\": 100, \"tabOrder\": 0}}], \"singleVisual\": {\"visualType\": \"card\", \"projections\": {\"Values\": [{\"queryRef\": \"fact_support_sla.Ticket Volume\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"f\", \"Entity\": \"fact_support_sla\", \"Type\": 0}], \"Select\": [{\"Measure\": {\"Expression\": {\"SourceRef\": {\"Source\": \"f\"}}, \"Property\": \"Ticket Volume\"}, \"Name\": \"fact_support_sla.Ticket Volume\", \"NativeReferenceName\": \"Ticket Volume\"}]}, \"vcObjects\": {\"title\": [{\"properties\": {\"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}, \"text\": {\"expr\": {\"Literal\": {\"Value\": \"'Ticket Volume'\"}}}}}]}}}",
+          "filters": "[]"
+        },
+        {
+          "x": 240,
+          "y": 20,
+          "z": 0,
+          "width": 200,
+          "height": 100,
+          "config": "{\"name\": \"AvgCSAT9224\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 240, \"y\": 20, \"z\": 0, \"width\": 200, \"height\": 100, \"tabOrder\": 0}}], \"singleVisual\": {\"visualType\": \"card\", \"projections\": {\"Values\": [{\"queryRef\": \"fact_support_sla.Avg CSAT\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"f\", \"Entity\": \"fact_support_sla\", \"Type\": 0}], \"Select\": [{\"Measure\": {\"Expression\": {\"SourceRef\": {\"Source\": \"f\"}}, \"Property\": \"Avg CSAT\"}, \"Name\": \"fact_support_sla.Avg CSAT\", \"NativeReferenceName\": \"Avg CSAT\"}]}, \"vcObjects\": {\"title\": [{\"properties\": {\"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}, \"text\": {\"expr\": {\"Literal\": {\"Value\": \"'Avg CSAT'\"}}}}}]}}}",
+          "filters": "[]"
+        },
+        {
+          "x": 460,
+          "y": 20,
+          "z": 0,
+          "width": 200,
+          "height": 100,
+          "config": "{\"name\": \"WithinSLA%3233\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 460, \"y\": 20, \"z\": 0, \"width\": 200, \"height\": 100, \"tabOrder\": 0}}], \"singleVisual\": {\"visualType\": \"card\", \"projections\": {\"Values\": [{\"queryRef\": \"fact_support_sla.Within SLA %\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"f\", \"Entity\": \"fact_support_sla\", \"Type\": 0}], \"Select\": [{\"Measure\": {\"Expression\": {\"SourceRef\": {\"Source\": \"f\"}}, \"Property\": \"Within SLA %\"}, \"Name\": \"fact_support_sla.Within SLA %\", \"NativeReferenceName\": \"Within SLA %\"}]}, \"vcObjects\": {\"title\": [{\"properties\": {\"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}, \"text\": {\"expr\": {\"Literal\": {\"Value\": \"'Within SLA %'\"}}}}}]}}}",
+          "filters": "[]"
+        },
+        {
+          "x": 680,
+          "y": 20,
+          "z": 0,
+          "width": 200,
+          "height": 100,
+          "config": "{\"name\": \"PendingTickets6339\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 680, \"y\": 20, \"z\": 0, \"width\": 200, \"height\": 100, \"tabOrder\": 0}}], \"singleVisual\": {\"visualType\": \"card\", \"projections\": {\"Values\": [{\"queryRef\": \"fact_support_sla.Pending Tickets\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"f\", \"Entity\": \"fact_support_sla\", \"Type\": 0}], \"Select\": [{\"Measure\": {\"Expression\": {\"SourceRef\": {\"Source\": \"f\"}}, \"Property\": \"Pending Tickets\"}, \"Name\": \"fact_support_sla.Pending Tickets\", \"NativeReferenceName\": \"Pending Tickets\"}]}, \"vcObjects\": {\"title\": [{\"properties\": {\"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}, \"text\": {\"expr\": {\"Literal\": {\"Value\": \"'Pending Tickets'\"}}}}}]}}}",
+          "filters": "[]"
+        },
+        {
+          "x": 20,
+          "y": 140,
+          "z": 0,
+          "width": 540,
+          "height": 320,
+          "config": "{\"name\": \"MonthlyTicketVolume147\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 20, \"y\": 140, \"z\": 0, \"width\": 540, \"height\": 320, \"tabOrder\": 0}}], \"singleVisual\": {\"visualType\": \"lineChart\", \"projections\": {\"Category\": [{\"queryRef\": \"fact_support_sla.opened_date\"}], \"Y\": [{\"queryRef\": \"fact_support_sla.Ticket Volume\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t\", \"Entity\": \"fact_support_sla\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t\"}}, \"Property\": \"opened_date\"}, \"Name\": \"fact_support_sla.opened_date\", \"NativeReferenceName\": \"opened_date\"}, {\"Measure\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t\"}}, \"Property\": \"Ticket Volume\"}, \"Name\": \"fact_support_sla.Ticket Volume\", \"NativeReferenceName\": \"Ticket Volume\"}]}, \"vcObjects\": {\"title\": [{\"properties\": {\"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}, \"text\": {\"expr\": {\"Literal\": {\"Value\": \"'Monthly Ticket Volume'\"}}}}}]}}}",
+          "filters": "[]"
+        },
+        {
+          "x": 580,
+          "y": 140,
+          "z": 0,
+          "width": 540,
+          "height": 320,
+          "config": "{\"name\": \"ReasonMix2824\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 580, \"y\": 140, \"z\": 0, \"width\": 540, \"height\": 320, \"tabOrder\": 0}}], \"singleVisual\": {\"visualType\": \"clusteredBarChart\", \"projections\": {\"Category\": [{\"queryRef\": \"fact_support_sla.reason\"}], \"Y\": [{\"queryRef\": \"fact_support_sla.Ticket Volume\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t\", \"Entity\": \"fact_support_sla\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t\"}}, \"Property\": \"reason\"}, \"Name\": \"fact_support_sla.reason\", \"NativeReferenceName\": \"reason\"}, {\"Measure\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t\"}}, \"Property\": \"Ticket Volume\"}, \"Name\": \"fact_support_sla.Ticket Volume\", \"NativeReferenceName\": \"Ticket Volume\"}]}, \"vcObjects\": {\"title\": [{\"properties\": {\"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}, \"text\": {\"expr\": {\"Literal\": {\"Value\": \"'Reason Mix'\"}}}}}]}}}",
+          "filters": "[]"
+        },
+        {
+          "x": 20,
+          "y": 480,
+          "z": 0,
+          "width": 540,
+          "height": 280,
+          "config": "{\"name\": \"ChannelMix5464\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 20, \"y\": 480, \"z\": 0, \"width\": 540, \"height\": 280, \"tabOrder\": 0}}], \"singleVisual\": {\"visualType\": \"clusteredBarChart\", \"projections\": {\"Category\": [{\"queryRef\": \"fact_support_sla.channel\"}], \"Y\": [{\"queryRef\": \"fact_support_sla.Ticket Volume\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t\", \"Entity\": \"fact_support_sla\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t\"}}, \"Property\": \"channel\"}, \"Name\": \"fact_support_sla.channel\", \"NativeReferenceName\": \"channel\"}, {\"Measure\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t\"}}, \"Property\": \"Ticket Volume\"}, \"Name\": \"fact_support_sla.Ticket Volume\", \"NativeReferenceName\": \"Ticket Volume\"}]}, \"vcObjects\": {\"title\": [{\"properties\": {\"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}, \"text\": {\"expr\": {\"Literal\": {\"Value\": \"'Channel Mix'\"}}}}}]}}}",
+          "filters": "[]"
+        },
+        {
+          "x": 580,
+          "y": 480,
+          "z": 0,
+          "width": 540,
+          "height": 280,
+          "config": "{\"name\": \"CSATbyChannel1282\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 580, \"y\": 480, \"z\": 0, \"width\": 540, \"height\": 280, \"tabOrder\": 0}}], \"singleVisual\": {\"visualType\": \"clusteredBarChart\", \"projections\": {\"Category\": [{\"queryRef\": \"fact_support_sla.channel\"}], \"Y\": [{\"queryRef\": \"fact_support_sla.Avg CSAT\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t\", \"Entity\": \"fact_support_sla\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t\"}}, \"Property\": \"channel\"}, \"Name\": \"fact_support_sla.channel\", \"NativeReferenceName\": \"channel\"}, {\"Measure\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t\"}}, \"Property\": \"Avg CSAT\"}, \"Name\": \"fact_support_sla.Avg CSAT\", \"NativeReferenceName\": \"Avg CSAT\"}]}, \"vcObjects\": {\"title\": [{\"properties\": {\"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}, \"text\": {\"expr\": {\"Literal\": {\"Value\": \"'CSAT by Channel'\"}}}}}]}}}",
+          "filters": "[]"
+        }
+      ],
+      "width": 1280,
+      "height": 800,
+      "config": "{}"
+    },
+    {
+      "name": "ReportSectionSLA",
+      "displayName": "SLA Performance",
+      "filters": "[]",
+      "ordinal": 1,
+      "visualContainers": [
+        {
+          "x": 20,
+          "y": 20,
+          "z": 0,
+          "width": 400,
+          "height": 360,
+          "config": "{\"name\": \"SLAStatusMix7421\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 20, \"y\": 20, \"z\": 0, \"width\": 400, \"height\": 360, \"tabOrder\": 0}}], \"singleVisual\": {\"visualType\": \"clusteredBarChart\", \"projections\": {\"Category\": [{\"queryRef\": \"fact_support_sla.sla_status\"}], \"Y\": [{\"queryRef\": \"fact_support_sla.Ticket Volume\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t\", \"Entity\": \"fact_support_sla\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t\"}}, \"Property\": \"sla_status\"}, \"Name\": \"fact_support_sla.sla_status\", \"NativeReferenceName\": \"sla_status\"}, {\"Measure\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t\"}}, \"Property\": \"Ticket Volume\"}, \"Name\": \"fact_support_sla.Ticket Volume\", \"NativeReferenceName\": \"Ticket Volume\"}]}, \"vcObjects\": {\"title\": [{\"properties\": {\"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}, \"text\": {\"expr\": {\"Literal\": {\"Value\": \"'SLA Status Mix'\"}}}}}]}}}",
+          "filters": "[]"
+        },
+        {
+          "x": 440,
+          "y": 20,
+          "z": 0,
+          "width": 400,
+          "height": 360,
+          "config": "{\"name\": \"ResolveHoursbyPriori1390\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 440, \"y\": 20, \"z\": 0, \"width\": 400, \"height\": 360, \"tabOrder\": 0}}], \"singleVisual\": {\"visualType\": \"clusteredBarChart\", \"projections\": {\"Category\": [{\"queryRef\": \"fact_support_sla.priority\"}], \"Y\": [{\"queryRef\": \"fact_support_sla.Avg Resolve Hours\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t\", \"Entity\": \"fact_support_sla\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t\"}}, \"Property\": \"priority\"}, \"Name\": \"fact_support_sla.priority\", \"NativeReferenceName\": \"priority\"}, {\"Measure\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t\"}}, \"Property\": \"Avg Resolve Hours\"}, \"Name\": \"fact_support_sla.Avg Resolve Hours\", \"NativeReferenceName\": \"Avg Resolve Hours\"}]}, \"vcObjects\": {\"title\": [{\"properties\": {\"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}, \"text\": {\"expr\": {\"Literal\": {\"Value\": \"'Resolve Hours by Priority'\"}}}}}]}}}",
+          "filters": "[]"
+        },
+        {
+          "x": 860,
+          "y": 20,
+          "z": 0,
+          "width": 300,
+          "height": 160,
+          "config": "{\"name\": \"BreachCount6372\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 860, \"y\": 20, \"z\": 0, \"width\": 300, \"height\": 160, \"tabOrder\": 0}}], \"singleVisual\": {\"visualType\": \"card\", \"projections\": {\"Values\": [{\"queryRef\": \"fact_support_sla.Breach Count\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"f\", \"Entity\": \"fact_support_sla\", \"Type\": 0}], \"Select\": [{\"Measure\": {\"Expression\": {\"SourceRef\": {\"Source\": \"f\"}}, \"Property\": \"Breach Count\"}, \"Name\": \"fact_support_sla.Breach Count\", \"NativeReferenceName\": \"Breach Count\"}]}, \"vcObjects\": {\"title\": [{\"properties\": {\"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}, \"text\": {\"expr\": {\"Literal\": {\"Value\": \"'Breach Count'\"}}}}}]}}}",
+          "filters": "[]"
+        },
+        {
+          "x": 860,
+          "y": 200,
+          "z": 0,
+          "width": 300,
+          "height": 160,
+          "config": "{\"name\": \"AvgResolveHours6995\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 860, \"y\": 200, \"z\": 0, \"width\": 300, \"height\": 160, \"tabOrder\": 0}}], \"singleVisual\": {\"visualType\": \"card\", \"projections\": {\"Values\": [{\"queryRef\": \"fact_support_sla.Avg Resolve Hours\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"f\", \"Entity\": \"fact_support_sla\", \"Type\": 0}], \"Select\": [{\"Measure\": {\"Expression\": {\"SourceRef\": {\"Source\": \"f\"}}, \"Property\": \"Avg Resolve Hours\"}, \"Name\": \"fact_support_sla.Avg Resolve Hours\", \"NativeReferenceName\": \"Avg Resolve Hours\"}]}, \"vcObjects\": {\"title\": [{\"properties\": {\"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}, \"text\": {\"expr\": {\"Literal\": {\"Value\": \"'Avg Resolve Hours'\"}}}}}]}}}",
+          "filters": "[]"
+        },
+        {
+          "x": 20,
+          "y": 400,
+          "z": 0,
+          "width": 540,
+          "height": 360,
+          "config": "{\"name\": \"BreachbyChannel7681\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 20, \"y\": 400, \"z\": 0, \"width\": 540, \"height\": 360, \"tabOrder\": 0}}], \"singleVisual\": {\"visualType\": \"clusteredBarChart\", \"projections\": {\"Category\": [{\"queryRef\": \"fact_support_sla.channel\"}], \"Y\": [{\"queryRef\": \"fact_support_sla.Breach Count\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t\", \"Entity\": \"fact_support_sla\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t\"}}, \"Property\": \"channel\"}, \"Name\": \"fact_support_sla.channel\", \"NativeReferenceName\": \"channel\"}, {\"Measure\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t\"}}, \"Property\": \"Breach Count\"}, \"Name\": \"fact_support_sla.Breach Count\", \"NativeReferenceName\": \"Breach Count\"}]}, \"vcObjects\": {\"title\": [{\"properties\": {\"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}, \"text\": {\"expr\": {\"Literal\": {\"Value\": \"'Breach by Channel'\"}}}}}]}}}",
+          "filters": "[]"
+        },
+        {
+          "x": 580,
+          "y": 400,
+          "z": 0,
+          "width": 540,
+          "height": 360,
+          "config": "{\"name\": \"WithinSLAbySegment9984\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 580, \"y\": 400, \"z\": 0, \"width\": 540, \"height\": 360, \"tabOrder\": 0}}], \"singleVisual\": {\"visualType\": \"clusteredBarChart\", \"projections\": {\"Category\": [{\"queryRef\": \"fact_support_sla.segment\"}], \"Y\": [{\"queryRef\": \"fact_support_sla.Within SLA %\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t\", \"Entity\": \"fact_support_sla\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t\"}}, \"Property\": \"segment\"}, \"Name\": \"fact_support_sla.segment\", \"NativeReferenceName\": \"segment\"}, {\"Measure\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t\"}}, \"Property\": \"Within SLA %\"}, \"Name\": \"fact_support_sla.Within SLA %\", \"NativeReferenceName\": \"Within SLA %\"}]}, \"vcObjects\": {\"title\": [{\"properties\": {\"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}, \"text\": {\"expr\": {\"Literal\": {\"Value\": \"'Within SLA by Segment'\"}}}}}]}}}",
+          "filters": "[]"
+        }
+      ],
+      "width": 1280,
+      "height": 800,
+      "config": "{}"
+    },
+    {
+      "name": "ReportSectionPending",
+      "displayName": "Pending",
+      "filters": "[]",
+      "ordinal": 2,
+      "visualContainers": [
+        {
+          "x": 20,
+          "y": 20,
+          "z": 0,
+          "width": 200,
+          "height": 100,
+          "config": "{\"name\": \"OpenTickets5543\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 20, \"y\": 20, \"z\": 0, \"width\": 200, \"height\": 100, \"tabOrder\": 0}}], \"singleVisual\": {\"visualType\": \"card\", \"projections\": {\"Values\": [{\"queryRef\": \"fact_support_sla.Open Tickets\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"f\", \"Entity\": \"fact_support_sla\", \"Type\": 0}], \"Select\": [{\"Measure\": {\"Expression\": {\"SourceRef\": {\"Source\": \"f\"}}, \"Property\": \"Open Tickets\"}, \"Name\": \"fact_support_sla.Open Tickets\", \"NativeReferenceName\": \"Open Tickets\"}]}, \"vcObjects\": {\"title\": [{\"properties\": {\"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}, \"text\": {\"expr\": {\"Literal\": {\"Value\": \"'Open Tickets'\"}}}}}]}}}",
+          "filters": "[]"
+        },
+        {
+          "x": 240,
+          "y": 20,
+          "z": 0,
+          "width": 280,
+          "height": 100,
+          "config": "{\"name\": \"BeyondAgingThreshold9635\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 240, \"y\": 20, \"z\": 0, \"width\": 280, \"height\": 100, \"tabOrder\": 0}}], \"singleVisual\": {\"visualType\": \"card\", \"projections\": {\"Values\": [{\"queryRef\": \"fact_support_sla.Beyond Aging Threshold\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"f\", \"Entity\": \"fact_support_sla\", \"Type\": 0}], \"Select\": [{\"Measure\": {\"Expression\": {\"SourceRef\": {\"Source\": \"f\"}}, \"Property\": \"Beyond Aging Threshold\"}, \"Name\": \"fact_support_sla.Beyond Aging Threshold\", \"NativeReferenceName\": \"Beyond Aging Threshold\"}]}, \"vcObjects\": {\"title\": [{\"properties\": {\"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}, \"text\": {\"expr\": {\"Literal\": {\"Value\": \"'Beyond Aging Threshold'\"}}}}}]}}}",
+          "filters": "[]"
+        },
+        {
+          "x": 20,
+          "y": 140,
+          "z": 0,
+          "width": 540,
+          "height": 400,
+          "config": "{\"name\": \"OpenbyPriority1997\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 20, \"y\": 140, \"z\": 0, \"width\": 540, \"height\": 400, \"tabOrder\": 0}}], \"singleVisual\": {\"visualType\": \"clusteredBarChart\", \"projections\": {\"Category\": [{\"queryRef\": \"fact_support_sla.priority\"}], \"Y\": [{\"queryRef\": \"fact_support_sla.Open Tickets\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t\", \"Entity\": \"fact_support_sla\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t\"}}, \"Property\": \"priority\"}, \"Name\": \"fact_support_sla.priority\", \"NativeReferenceName\": \"priority\"}, {\"Measure\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t\"}}, \"Property\": \"Open Tickets\"}, \"Name\": \"fact_support_sla.Open Tickets\", \"NativeReferenceName\": \"Open Tickets\"}]}, \"vcObjects\": {\"title\": [{\"properties\": {\"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}, \"text\": {\"expr\": {\"Literal\": {\"Value\": \"'Open by Priority'\"}}}}}]}}}",
+          "filters": "[]"
+        },
+        {
+          "x": 580,
+          "y": 140,
+          "z": 0,
+          "width": 540,
+          "height": 400,
+          "config": "{\"name\": \"OpenbyReason5201\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 580, \"y\": 140, \"z\": 0, \"width\": 540, \"height\": 400, \"tabOrder\": 0}}], \"singleVisual\": {\"visualType\": \"clusteredBarChart\", \"projections\": {\"Category\": [{\"queryRef\": \"fact_support_sla.reason\"}], \"Y\": [{\"queryRef\": \"fact_support_sla.Open Tickets\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t\", \"Entity\": \"fact_support_sla\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t\"}}, \"Property\": \"reason\"}, \"Name\": \"fact_support_sla.reason\", \"NativeReferenceName\": \"reason\"}, {\"Measure\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t\"}}, \"Property\": \"Open Tickets\"}, \"Name\": \"fact_support_sla.Open Tickets\", \"NativeReferenceName\": \"Open Tickets\"}]}, \"vcObjects\": {\"title\": [{\"properties\": {\"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}, \"text\": {\"expr\": {\"Literal\": {\"Value\": \"'Open by Reason'\"}}}}}]}}}",
+          "filters": "[]"
+        },
+        {
+          "x": 20,
+          "y": 560,
+          "z": 0,
+          "width": 1100,
+          "height": 200,
+          "config": "{\"name\": \"Aging(age_hours)3339\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 20, \"y\": 560, \"z\": 0, \"width\": 1100, \"height\": 200, \"tabOrder\": 0}}], \"singleVisual\": {\"visualType\": \"clusteredBarChart\", \"projections\": {\"Category\": [{\"queryRef\": \"fact_support_sla.priority\"}], \"Y\": [{\"queryRef\": \"fact_support_sla.Beyond Aging Threshold\"}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t\", \"Entity\": \"fact_support_sla\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t\"}}, \"Property\": \"priority\"}, \"Name\": \"fact_support_sla.priority\", \"NativeReferenceName\": \"priority\"}, {\"Measure\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t\"}}, \"Property\": \"Beyond Aging Threshold\"}, \"Name\": \"fact_support_sla.Beyond Aging Threshold\", \"NativeReferenceName\": \"Beyond Aging Threshold\"}]}, \"vcObjects\": {\"title\": [{\"properties\": {\"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}, \"text\": {\"expr\": {\"Literal\": {\"Value\": \"'Aging (age_hours)'\"}}}}}]}}}",
+          "filters": "[]"
+        }
+      ],
+      "width": 1280,
+      "height": 800,
+      "config": "{}"
+    }
+  ],
+  "layoutOptimization": 0
+}

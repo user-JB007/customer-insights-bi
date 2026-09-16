@@ -1,6 +1,6 @@
 # Semantic model — Customer Insights BI (Power BI)
 
-Star-ish layout over curated marts. Two reports share the same model.
+Star-ish layout over curated marts. Two reports share `CustomerInsights.SemanticModel` (`model.bim`).
 
 ## Tables
 
@@ -11,26 +11,19 @@ Star-ish layout over curated marts. Two reports share the same model.
 | `fact_retention_monthly` | cohort × tenure month | `cohort_month`, `months_since_signup`, `retention_rate` |
 | `fact_revenue_cohorts` | cohort × tenure month | revenue, `revenue_per_customer` |
 | `fact_product_revenue` | month × product | `txn_month`, `product`, `revenue` |
-| `dim_segment_perf` | segment × region × plan | aggregated KPIs (optional) |
+| `dim_segment_perf` | segment × region × plan | aggregated KPIs |
+| `fact_support_sla` | ticket | event_id, SLA clocks, csat, sla_status, is_open |
+| `Aging Threshold` | parameter | `Aging Threshold Hours` (default 72) |
 
-## Relationships (conceptual)
+## Relationships
 
-- `fact_customer_360[segment|region|plan]` → filters on `dim_segment_perf`
-- Date: use `fact_mrr_movement[month]` as calendar bridge for time intelligence where needed
-- Cohorts are self-contained (no customer-level join required for heatmaps)
+- `fact_support_sla[customer_id]` → `fact_customer_360[customer_id]` (many-to-one)
 
 ## Report binding
 
 | Report | Primary tables |
 |--------|----------------|
-| Customer Health | customer_360, mrr_movement, retention_monthly |
-| Revenue & Segments | mrr_movement, customer_360, product_revenue, revenue_cohorts |
+| Customer Retention & Growth | customer_360, mrr_movement, retention_monthly, revenue_cohorts, product_revenue |
+| Support & SLA Performance | support_sla (+ customer_360) |
 
-
-## Support & SLA
-
-| Table | Grain | Key columns |
-|-------|-------|-------------|
-| `fact_support_sla` (`support_sla.csv`) | ticket | event_id, opened_at, resolved_at, sla_due_at, status, priority, reason, channel, csat, sla_status, is_open, age_hours, segment, region |
-
-Relate `fact_support_sla[customer_id]` → `fact_customer_360[customer_id]` (many-to-one).
+M partitions load CSVs via **MartsFolder** parameter (default `./../data/` under `powerbi/`).

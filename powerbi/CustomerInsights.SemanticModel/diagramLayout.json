@@ -1,0 +1,88 @@
+{
+  "version": "1.1.0",
+  "diagrams": [
+    {
+      "ordinal": 0,
+      "scrollPosition": {
+        "x": 0,
+        "y": 0
+      },
+      "nodes": [
+        {
+          "location": {
+            "x": 0,
+            "y": 0
+          },
+          "nodeIndex": "fact_customer_360",
+          "size": {
+            "height": 300,
+            "width": 220
+          }
+        },
+        {
+          "location": {
+            "x": 300,
+            "y": 0
+          },
+          "nodeIndex": "fact_mrr_movement",
+          "size": {
+            "height": 260,
+            "width": 200
+          }
+        },
+        {
+          "location": {
+            "x": 600,
+            "y": 0
+          },
+          "nodeIndex": "fact_retention_monthly",
+          "size": {
+            "height": 200,
+            "width": 200
+          }
+        },
+        {
+          "location": {
+            "x": 0,
+            "y": 360
+          },
+          "nodeIndex": "fact_support_sla",
+          "size": {
+            "height": 300,
+            "width": 220
+          }
+        },
+        {
+          "location": {
+            "x": 300,
+            "y": 360
+          },
+          "nodeIndex": "fact_product_revenue",
+          "size": {
+            "height": 180,
+            "width": 180
+          }
+        },
+        {
+          "location": {
+            "x": 600,
+            "y": 360
+          },
+          "nodeIndex": "dim_segment_perf",
+          "size": {
+            "height": 200,
+            "width": 180
+          }
+        }
+      ],
+      "name": "All tables",
+      "zoomValue": 100,
+      "pinKeyFieldsToTop": false,
+      "showExtraHeaderInfo": false,
+      "hideKeyFieldsWhenCollapsed": false,
+      "tablesLocked": false
+    }
+  ],
+  "selectedDiagram": "All tables",
+  "defaultDiagram": "All tables"
+}
